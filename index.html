@@ -18,14 +18,40 @@
 		}
 
 		.jumbotron {
-			background-color: #3b5877;
+			background-image: url('images/sky.jpg');
+			background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
 			color: #fff;
 		}
-
-		.profile-picture {
-			max-width: 200px;
-			border-radius: 50%;
+		
+		p {
+			margin-bottom: 15px;
 		}
+
+		
+		ul.custom-list {
+            list-style-type: none; 
+            padding: 0;
+        }
+        ul.custom-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        ul.custom-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-size: 20px; 
+        }
+        .extra-content {
+            margin-top: 10px;
+            font-size: 14px; 
+            color: #555;
+        }
 	</style>
 </head>
 
@@ -67,17 +93,18 @@
 	<!-- About Me Section -->
 	<section id="about" class="container mt-5">
 		<h2 class="mb-4">About Me</h2>
-		<p>My name is Chen Yong Jin :)</p>
-		<p>I am currently studying at the School of Information Management, Yunlin University of Science and Technology
-		</p>
+		<p>I am currently studying at the School of Information Management at Yunlin University of Science and Technology, with a focus on algorithms and programming languages such as Java, Rust, C/C++, and Python.</p>
+		<p>I am passionate about solving algorithmic problems and developing innovative solutions.</p>
+		<p>In addition to my studies, I am improving my English skills and am proficient in French. My goal is to continually enhance my abilities and apply my knowledge in diverse areas. I am excited about the opportunities to contribute and grow in the field.</p>
+
 	</section>
 
 	<section id="about" class="container mt-5">
 		<h2 class="mb-4">我的筆記</h2>
-		<ul>
-			<li><a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/SkP7HGcGT" target="_blank">DataMining</a></li>
-			<li><a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/ByspFKXe9" target="_blank">Java</a></li>
-			<li><a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/HkQauLY7q" target="_blank">Rust</a></li>
+		<ul class="custom-list">
+			<li><a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/SkP7HGcGT" target="_blank">DataMining</a><div class="extra-content">有關機器學習課程的上課內容</div></li>
+			<li><a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/ByspFKXe9" target="_blank">Java</a><div class="extra-content">這是一個Java基礎相關的筆記</div></li>
+			<li><a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/HkQauLY7q" target="_blank">Rust</a><div class="extra-content">這是一個Rust基礎相關的筆記</div></li>
 		</ul>
 	</section>
 
