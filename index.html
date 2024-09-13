@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Imcyj123 Personal Homepage</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+		integrity="sha384-ezvSkd1ISwE2z47M2tkz/KzCXL1XCI1rXnK3iXEeTwKfoU/GpV7WoBdI9K9sdQV5" crossorigin="anonymous">
+	<!-- Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Custom CSS -->
+	<style>
+		body {
+			background-color: #f8f9fa;
+		}
+
+		.jumbotron {
+			background-image: url('images/sky.jpg');
+			background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+			color: #fff;
+		}
+		
+		p {
+			margin-bottom: 15px;
+		}
+
+		
+		ul.custom-list {
+            list-style-type: none; 
+            padding: 0;
+        }
+        ul.custom-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        ul.custom-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-size: 20px; 
+        }
+        .extra-content {
+            margin-top: 10px;
+            font-size: 14px; 
+            color: #555;
+        }
+	</style>
+</head>
+
+<body>
+
+	<!-- Navbar -->
+	<!--
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container">
+			<a class="navbar-brand" href="#">Imcyj123</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+				aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav ms-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="#about">About Me</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#portfolio">Portfolio</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#contact">Contact</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	-->
+
+
+
+	<!-- Jumbotron -->
+	<div class="jumbotron text-center">
+		<img src="your-profile-picture.jpg" alt="Welcome" class="profile-picture">
+		<h1 class="display-4">Imcyj123's blog</h1>
+		<p class="lead">Programmer</p>
+	</div>
+
+	<!-- About Me Section -->
+	<section id="about" class="container mt-5">
+		<h2 class="mb-4">About Me</h2>
+		<p>I am currently studying at the School of Information Management at Yunlin University of Science and Technology, with a focus on algorithms and programming languages such as Java, Rust, C/C++, and Python.</p>
+		<p>I am passionate about solving algorithmic problems and developing innovative solutions.</p>
+		<p>In addition to my studies, I am improving my English skills and am proficient in French. My goal is to continually enhance my abilities and apply my knowledge in diverse areas. I am excited about the opportunities to contribute and grow in the field.</p>
+
+	</section>
+
+	<section id="about" class="container mt-5">
+		<h2 class="mb-4">我的筆記</h2>
+		<ul class="custom-list">
+			<li><a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/SkP7HGcGT" target="_blank">DataMining</a><div class="extra-content">有關機器學習課程的上課內容</div></li>
+			<li><a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/ByspFKXe9" target="_blank">Java</a><div class="extra-content">這是一個Java基礎相關的筆記</div></li>
+			<li><a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/HkQauLY7q" target="_blank">Rust</a><div class="extra-content">這是一個Rust基礎相關的筆記</div></li>
+			<li><a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/rk2lbbjNC" target="_blank">狀態機</a><div class="extra-content">這是"3301資訊科學基礎"的筆記</div></li>
+		</ul>
+	</section>
+
+	<!-- Contact Section -->
+	<section id="contact" class="container mt-5">
+		<h2 class="mb-4">Contact</h2>
+		<p><i class="fa fa-github">  Imcyj123</i></p>
+		<p><i class="fa fa-envelope"> kurase3201@gmail.com</i></p>
+	</section>
+
+	<!-- Bootstrap JS (optional) -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
