@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>心情溫度計（BSRS簡式健康量表）</title>
+    <style>
+        body { font-family: sans-serif; }
+        table { width: 80%; margin: 20px auto; border-collapse: collapse; }
+        th, td { border: 1px solid #666; padding: 8px; text-align: center; }
+        th { background-color: skyblue; font-weight: bold; }
+        tr:nth-child(even) { background-color: #EBEBEB; }
+        .highlight { background-color: lightgreen; } /* Changed for better visibility */
+        .suicide-warning { color: red; font-weight: bold; }
+    </style>
+    <script>
+        function calculateScore() {
+            let sum = 0;
+            for (let i = 1; i <= 5; i++) {
+                const radios = document.getElementsByName(`radioBtn${i}`);
+                for (const radio of radios) {
+                    if (radio.checked) {
+                        sum += parseInt(radio.value);
+                        break;
+                    }
+                }
+            }
+            return sum;
+        }
+
+        function updateScore() {
+            const score = calculateScore();
+            document.getElementById('txtSum').value = score;
+            updateExplanation(score);
+        }
+
+        function updateExplanation(score) {
+            const ranges = [
+                { min: 0, max: 5, text: '身心適應狀況良好' },
+                { min: 6, max: 9, text: '輕度情緒困擾，建議找家人或朋友談談，抒發情緒' },
+                { min: 10, max: 14, text: '中度情緒困擾，建議尋求心理諮詢或接受專業諮詢' },
+                { min: 15, max: 19, text: '重度情緒困擾，需高關懷，建議尋求專業心理治療或精神科門診治療' }
+            ];
+
+            let found = false;
+            for (const range of ranges) {
+                if (score >= range.min && score <= range.max) {
+                    document.getElementById('explanation').textContent = range.text;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+              document.getElementById('explanation').textContent = "";
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const radios = document.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => radio.addEventListener('click', updateScore));
+            updateScore(); // Initial update
+        });
+    </script>
+</head>
+<body>
+
+<p align="center"><font size="+2">請您仔細回想一下，在最近這一星期中（包括今天），<br>下列敘述讓您感到困擾或苦惱的程度？</font></p>
+
+<form name="form1" id="form1">
+    <table>
+        <thead>
+            <tr>
+                <th>項目</th>
+                <th>0分<br>(完全沒有)</th>
+                <th>1分<br>(輕　微)</th>
+                <th>2分<br>(中等程度)</th>
+                <th>3分<br>(厲　害)</th>
+                <th>4分<br>(非常厲害)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td>1. 感覺緊張不安</td>
+              <td><label><input type="radio" name="radioBtn1" value="0" checked></label></td>
+              <td><label><input type="radio" name="radioBtn1" value="1"></label></td>
+              <td><label><input type="radio" name="radioBtn1" value="2"></label></td>
+              <td><label><input type="radio" name="radioBtn1" value="3"></label></td>
+              <td><label><input type="radio" name="radioBtn1" value="4"></label></td>
+            </tr>
+            <tr>
+              <td>2. 覺得容易苦惱或動怒</td>
+              <td><label><input type="radio" name="radioBtn2" value="0" checked></label></td>
+              <td><label><input type="radio" name="radioBtn2" value="1"></label></td>
+              <td><label><input type="radio" name="radioBtn2" value="2"></label></td>
+              <td><label><input type="radio" name="radioBtn2" value="3"></label></td>
+              <td><label><input type="radio" name="radioBtn2" value="4"></label></td>
+            </tr>
+             <tr>
+              <td>3. 感覺憂鬱、心情低落</td>
+              <td><label><input type="radio" name="radioBtn3" value="0" checked></label></td>
+              <td><label><input type="radio" name="radioBtn3" value="1"></label></td>
+              <td><label><input type="radio" name="radioBtn3" value="2"></label></td>
+              <td><label><input type="radio" name="radioBtn3" value="3"></label></td>
+              <td><label><input type="radio" name="radioBtn3" value="4"></label></td>
+            </tr>
+             <tr>
+              <td>4. 覺得比不上別人</td>
+              <td><label><input type="radio" name="radioBtn4" value="0" checked></label></td>
+              <td><label><input type="radio" name="radioBtn4" value="1"></label></td>
+              <td><label><input type="radio" name="radioBtn4" value="2"></label></td>
+              <td><label><input type="radio" name="radioBtn4" value="3"></label></td>
+              <td><label><input type="radio" name="radioBtn4" value="4"></label></td>
+            </tr>
+             <tr>
+              <td>5. 睡眠困難，譬如難以入睡、易醒或早醒</td>
+              <td><label><input type="radio" name="radioBtn5" value="0" checked></label></td>
+              <td><label><input type="radio" name="radioBtn5" value="1"></label></td>
+              <td><label><input type="radio" name="radioBtn5" value="2"></label></td>
+              <td><label><input type="radio" name="radioBtn5" value="3"></label></td>
+              <td><label><input type="radio" name="radioBtn5" value="4"></label></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h6 align="center">總分：<input name="txtSum" type="text" value="0" readonly="readonly" id="txtSum"></h6>
+    <div id="explanation"></div> <span class="suicide-warning">有自殺想法評分為 2分以上時，即建議尋求專業輔導或精神科治療</span>
+
+</form>
+
+
+<table border="0" align="center" valign="center" cellpadding="3" cellspacing="1" bgcolor="#999999">
+  <thead>
+    <tr>
+      <th align="center" bgcolor="#EE82EE">總　分</th>
+      <th align="center" bgcolor="#EE82EE">說　明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td align="center" bgcolor="#FFFFFF" class="cs09">0-5分</td>
+      <td align="left" bgcolor="#FFFFFF" class="pagelink4">　　身心適應狀況良好</td>
+    </tr>
+    <tr>
+      <td align="center" bgcolor="#EBEBEB" class="cs09">6-9分</td>
+      <td align="left" bgcolor="#EBEBEB" class="pagelink4">　　輕度情緒困擾，建議找家人或朋友談談，抒發情緒</td>
+    </tr>
+    <tr>
+      <td align="center" bgcolor="#FFFFFF" class="cs09">10-14分</td>
+      <td align="left" bgcolor="#FFFFFF" class="pagelink4">　　中度情緒困擾，建議尋求心理諮詢或接受專業諮詢</td>
+    </tr>
+    <tr>
+      <td align="center" bgcolor="#FFFFFF" class="cs09">15-19分</td>
+      <td align="left" bgcolor="#FFFFFF" class="pagelink4">　　重度情緒困擾，需高關懷，建議尋求專業心理治療或精神科門診治療</td>
+    </tr>
+    <tr>
+      <td align="center" bgcolor="#FFFFFF" class="cs09"><font color="FF0000">有自殺想法</font></td>
+      <td align="left" bgcolor="#FFFFFF" class="pagelink4"><font color="FF0000">　　評分為 2分以上時，即建議尋求專業輔導或精神科治療</font></td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
