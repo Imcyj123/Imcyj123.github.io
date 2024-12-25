@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>壓力評估表</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .list_title {
+            background-color: #4a90e2;
+            color: white;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .list_title div {
+            text-align: center;
+        }
+        
+        .exam_content {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .col {
+            padding: 0 10px;
+        }
+        
+        .col-xs-1 {
+            width: 8%;
+        }
+        
+        .col-xs-9 {
+            width: 76%;
+            text-align: left;
+        }
+        
+        input[type="radio"] {
+            transform: scale(1.2);
+        }
+        
+        .btn {
+            background-color: #4a90e2;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        
+        .btn:hover {
+            background-color: #357abd;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .stress-low {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+        
+        .stress-medium {
+            background-color: #fcf8e3;
+            color: #8a6d3b;
+        }
+        
+        .stress-high {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+        
+        .stress-severe {
+            background-color: #d9534f;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center">壓力評估表</h1>
+        <form id="stressForm" onsubmit="return calculateStress(event)">
+            <div class="list_title">
+                <div class="col-xs-1">編號</div>
+                <div class="col-xs-1">是</div>
+                <div class="col-xs-1">否</div>
+                <div class="col-xs-9">題目</div>
+            </div>
+            
+            <div class="exam_content">
+                <div class="col-xs-1">1</div>
+                <div class="col-xs-1"><input type="radio" name="q1" value="yes" required></div>
+                <div class="col-xs-1"><input type="radio" name="q1" value="no"></div>
+                <div class="col-xs-9">您最近是否經常感到緊張，覺得工作總是做不完？</div>
+            </div>
+            
+            <div class="exam_content">
+                <div class="col-xs-1">2</div>
+                <div class="col-xs-1"><input type="radio" name="q2" value="yes" required></div>
+                <div class="col-xs-1"><input type="radio" name="q2" value="no"></div>
+                <div class="col-xs-9">您最近是否老是睡不好，常常失眠或睡眠品質不佳？</div>
+            </div>
+            
+            <div class="exam_content">
+                <div class="col-xs-1">3</div>
+                <div class="col-xs-1"><input type="radio" name="q3" value="yes" required></div>
+                <div class="col-xs-1"><input type="radio" name="q3" value="no"></div>
+                <div class="col-xs-9">您最近是否經常有情緒低落、焦慮、煩躁的情況？</div>
+            </div>
+            
+            <div class="exam_content">
+                <div class="col-xs-1">4</div>
+                <div class="col-xs-1"><input type="radio" name="q4" value="yes" required></div>
+                <div class="col-xs-1"><input type="radio" name="q4" value="no"></div>
+                <div class="col-xs-9">您最近是否經常忘東忘西、變得很健忘？</div>
+            </div>
+            
+            <div class="exam_content">
+                <div class="col-xs-1">5</div>
+                <div class="col-xs-1"><input type="radio" name="q5" value="yes" required></div>
+                <div class="col-xs-1"><input type="radio" name="q5" value="no"></div>
+                <div class="col-xs-9">您最近是否經常覺得胃口不好？或胃口特別好？</div>
+            </div>
+            
+            <div class="exam_content">
+                <div class="col-xs-1">6</div>
+                <div class="col-xs-1"><input type="radio" name="q6" value="yes" required></div>
+                <div class="col-xs-1"><input type="radio" name="q6" value="no"></div>
+                <div class="col-xs-9">您最近六個月內是否生病不只一次了？</div>
+            </div>
+            
+            <div class="exam_content">
+                <div class="col-xs-1">7</div>
+                <div class="col-xs-1"><input type="radio" name="q7" value="yes" required></div>
+                <div class="col-xs-1"><input type="radio" name="q7" value="no"></div>
+                <div class="col-xs-9">您最近是否經常覺得很累，假日都在睡覺？</div>
+            </div>
+            
+            <div class="exam_content">
+                <div class="col-xs-1">8</div>
+                <div class="col-xs-1"><input type="radio" name="q8" value="yes" required></div>
+                <div class="col-xs-1"><input type="radio" name="q8" value="no"></div>
+                <div class="col-xs-9">您最近是否經常覺得頭痛、腰痠背痛？</div>
+            </div>
+            
+            <div class="exam_content">
+                <div class="col-xs-1">9</div>
+                <div class="col-xs-1"><input type="radio" name="q9" value="yes" required></div>
+                <div class="col-xs-1"><input type="radio" name="q9" value="no"></div>
+                <div class="col-xs-9">您最近是否經常意見和別人不同？</div>
+            </div>
+            
+            <div class="exam_content">
+                <div class="col-xs-1">10</div>
+                <div class="col-xs-1"><input type="radio" name="q10" value="yes" required></div>
+                <div class="col-xs-1"><input type="radio" name="q10" value="no"></div>
+                <div class="col-xs-9">您最近是否注意力經常難以集中？</div>
+            </div>
+            
+            <div class="exam_content">
+                <div class="col-xs-1">11</div>
+                <div class="col-xs-1"><input type="radio" name="q11" value="yes" required></div>
+                <div class="col-xs-1"><input type="radio" name="q11" value="no"></div>
+                <div class="col-xs-9">您最近是否經常覺得未來充滿不確定感？恐懼感？</div>
+            </div>
+            
+            <div class="exam_content">
+                <div class="col-xs-1">12</div>
+                <div class="col-xs-1"><input type="radio" name="q12" value="yes" required></div>
+                <div class="col-xs-1"><input type="radio" name="q12" value="no"></div>
+                <div class="col-xs-9">有人說您最近氣色不太好嗎？</div>
+            </div>
+            
+            <button type="submit" class="btn">計算結果</button>
+        </form>
+        
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        function calculateStress(event) {
+            event.preventDefault();
+            
+            let yesCount = 0;
+            for (let i = 1; i <= 12; i++) {
+                const radioButtons = document.getElementsByName('q' + i);
+                if (radioButtons[0].checked) { // "yes" is always the first radio button
+                    yesCount++;
+                }
+            }
+            
+            const resultDiv = document.getElementById('result');
+            let message = `您回答了 ${yesCount} 個「是」。\n`;
+            let className = '';
+            
+            if (yesCount <= 3) {
+                message += '您的壓力指數還在能負荷的範圍。';
+                className = 'stress-low';
+            } else if (yesCount <= 5) {
+                message += '壓力滿困擾您，雖能勉強應付，但必需認真學習壓力管理了，同時多與良師益友聊一聊。';
+                className = 'stress-medium';
+            } else if (yesCount <= 8) {
+                message += '您的壓力很大，趕快去看心理衛生專業人員，接受系統性的心理治療。';
+                className = 'stress-high';
+            } else {
+                message += '您的壓力已很嚴重，應該看精神專科醫師，依醫師處方用藥物治療與心理治療，幫忙您的生活趕快恢復正常軌道。';
+                className = 'stress-severe';
+            }
+            
+            resultDiv.textContent = message;
+            resultDiv.className = `result ${className}`;
+            resultDiv.style.display = 'block';
+            
+            return false;
+        }
+    </script>
+</body>
+</html>
