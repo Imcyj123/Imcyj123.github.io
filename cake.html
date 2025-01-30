@@ -46,7 +46,7 @@
             <h3>歷史記錄</h3>
             <ul>
                 <li v-for="(entry, index) in history" :key="index">
-                    {{ entry.date }} - {{ entry.name }}: {{ entry.pricePerGram }} NTD/g
+                    {{ entry.date }} - {{ entry.name }}: {{ entry.weight }} g, {{ entry.amount }} NTD, 每克價格: {{ entry.pricePerGram }} NTD/g
                 </li>
             </ul>
         </div>
@@ -88,10 +88,12 @@
                     }
                 },
                 saveData() {
-                    if (this.date && this.name && this.pricePerGram !== null) {
+                    if (this.date && this.name && this.weight > 0 && this.amount > 0 && this.pricePerGram !== null) {
                         const newEntry = {
                             date: this.date,
                             name: this.name,
+                            weight: this.weight,
+                            amount: this.amount,
                             pricePerGram: this.pricePerGram
                         };
 
@@ -99,11 +101,12 @@
                         const newHistoryRef = database.ref('history').push();
                         newHistoryRef.set(newEntry).then(() => {
                             this.history.push(newEntry);
+                            alert('資料已儲存');
                         }).catch(error => {
                             alert('儲存資料時發生錯誤: ' + error.message);
                         });
                     } else {
-                        alert('請先計算價格再儲存');
+                        alert('請確認所有欄位已正確填寫並計算價格');
                     }
                 },
                 fetchHistory() {
