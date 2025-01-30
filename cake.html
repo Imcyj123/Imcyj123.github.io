@@ -40,7 +40,7 @@
                 <button @click="calculate">計算</button>
                 <button @click="saveData">儲存</button>
             </div>
-            <div v-if="pricePerGram !== null">
+            <div v-if="pricePerGram !== ''">
                 <p>每克價格: {{ pricePerGram }} NTD/g</p>
             </div>
             <h3>歷史記錄</h3>
@@ -76,19 +76,20 @@
                 name: '',
                 weight: 0,
                 amount: 0,
-                pricePerGram: null,
+                pricePerGram: "", // 預設為空字串，確保 Vue 正常渲染
                 history: []
             },
             methods: {
                 calculate() {
                     if (this.weight > 0 && this.amount > 0) {
                         this.pricePerGram = (this.amount / this.weight).toFixed(2);
+                        console.log("計算後的每克價格: ", this.pricePerGram);
                     } else {
                         alert('請確認輸入的數據正確');
                     }
                 },
                 saveData() {
-                    if (this.date && this.name && this.weight > 0 && this.amount > 0 && this.pricePerGram !== null) {
+                    if (this.date && this.name && this.weight > 0 && this.amount > 0 && this.pricePerGram !== '') {
                         const newEntry = {
                             date: this.date,
                             name: this.name,
@@ -96,7 +97,7 @@
                             amount: this.amount,
                             pricePerGram: this.pricePerGram
                         };
-
+                        
                         // 儲存資料到 Firebase
                         const newHistoryRef = database.ref('history').push();
                         newHistoryRef.set(newEntry).then(() => {
@@ -113,10 +114,12 @@
                     // 從 Firebase 讀取歷史資料
                     database.ref('history').once('value', snapshot => {
                         const data = snapshot.val();
-                        this.history = [];
-                        for (const key in data) {
-                            this.history.push(data[key]);
+                        if (data) {
+                            this.history = Object.values(data);
+                            console.log("讀取到的歷史資料: ", this.history);
                         }
+                    }).catch(error => {
+                        console.error("讀取 Firebase 數據失敗: ", error);
                     });
                 }
             },
