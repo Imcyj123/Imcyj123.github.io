@@ -44,13 +44,7 @@
             <h3>歷史記錄</h3>
             <ul>
                 <li v-for="(entry, index) in history" :key="index">
-                    <span v-if="!entry.editing">{{ entry.date }} - {{ entry.name }}: {{ entry.pricePerGram }} NTD/g</span>
-                    <span v-else>
-                        <input type="date" v-model="entry.date">
-                        <input type="text" v-model="entry.name">
-                        <input type="number" v-model="entry.pricePerGram" step="0.01">
-                    </span>
-                    <button @click="editEntry(index)">{{ entry.editing ? '更新' : '編輯' }}</button>
+                    {{ entry.date }} - {{ entry.name }}: {{ entry.pricePerGram }} NTD/g
                 </li>
             </ul>
         </div>
@@ -80,20 +74,13 @@
                         const newEntry = {
                             date: this.date,
                             name: this.name,
-                            pricePerGram: this.pricePerGram,
-                            editing: false
+                            pricePerGram: this.pricePerGram
                         };
                         this.history.push(newEntry);
                         localStorage.setItem('history', JSON.stringify(this.history));
                     } else {
                         alert('請先計算價格再儲存');
                     }
-                },
-                editEntry(index) {
-                    if (this.history[index].editing) {
-                        localStorage.setItem('history', JSON.stringify(this.history));
-                    }
-                    this.history[index].editing = !this.history[index].editing;
                 }
             }
         });
