@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>簡單計價網頁</title>
+    <title>簡單計價網頁 (Firebase 版本)</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -32,11 +32,14 @@
             background-color: #45a049;
         }
     </style>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
 </head>
 <body>
 
     <div class="container">
-        <h2>計價工具</h2>
+        <h2>計價工具 (Firebase 版本)</h2>
         <label for="item">選擇商品：</label>
         <select id="item">
             <option value="100">商品 A - $100</option>
@@ -47,17 +50,48 @@
         <label for="quantity">數量：</label>
         <input type="number" id="quantity" value="1" min="1">
 
-        <button onclick="calculatePrice()">計算總價</button>
+        <button onclick="calculatePrice()">計算總價並儲存</button>
 
         <h3>總價：<span id="totalPrice">0</span> 元</h3>
     </div>
 
     <script>
+        // Firebase 配置
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY", 
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // 初始化 Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database(app);
+
+        // 計算並儲存總價
         function calculatePrice() {
             var itemPrice = parseInt(document.getElementById('item').value);
             var quantity = parseInt(document.getElementById('quantity').value);
             var total = itemPrice * quantity;
             document.getElementById('totalPrice').textContent = total;
+
+            // 儲存到 Firebase Realtime Database
+            const totalPriceRef = database.ref('orders').push();
+            totalPriceRef.set({
+                itemPrice: itemPrice,
+                quantity: quantity,
+                total: total,
+                timestamp: new Date().toISOString()
+            })
+            .then(() => {
+                alert('訂單已儲存至 Firebase!');
+            })
+            .catch((error) => {
+                console.error('儲存資料時發生錯誤：', error);
+            });
         }
     </script>
 
