@@ -1,66 +1,54 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>簡單計價網頁 (Firebase 版本)</title>
+    <title>材料價格計算</title>
+    <script src="https://www.gstatic.com/firebasejs/9.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.7.0/firebase-firestore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-        }
-        label, select, input, button {
-            margin: 10px 0;
-            width: 100%;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { width: 500px; margin: 0 auto; }
+        .form-group { margin-bottom: 10px; }
+        input { width: 100%; padding: 8px; }
+        button { padding: 10px 15px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
     </style>
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
 </head>
 <body>
-
     <div class="container">
-        <h2>計價工具 (Firebase 版本)</h2>
-        <label for="item">選擇商品：</label>
-        <select id="item">
-            <option value="100">商品 A - $100</option>
-            <option value="200">商品 B - $200</option>
-            <option value="300">商品 C - $300</option>
-        </select>
-
-        <label for="quantity">數量：</label>
-        <input type="number" id="quantity" value="1" min="1">
-
-        <button onclick="calculatePrice()">計算總價並儲存</button>
-
-        <h3>總價：<span id="totalPrice">0</span> 元</h3>
+        <h2>材料價格計算器</h2>
+        <div id="app">
+            <div class="form-group">
+                <label for="date">購買日期</label>
+                <input type="date" v-model="date" id="date">
+            </div>
+            <div class="form-group">
+                <label for="name">材料名稱</label>
+                <input type="text" v-model="name" id="name">
+            </div>
+            <div class="form-group">
+                <label for="weight">公克數</label>
+                <input type="number" v-model="weight" id="weight" step="0.1">
+            </div>
+            <div class="form-group">
+                <label for="amount">購買金額 (NTD)</label>
+                <input type="number" v-model="amount" id="amount" step="0.01">
+            </div>
+            <div class="form-group">
+                <button @click="calculateAndSave">計算並儲存</button>
+            </div>
+            <div v-if="pricePerGram !== null">
+                <p>每克價格: {{ pricePerGram }} NTD/g</p>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Firebase 配置
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY", 
+            apiKey: "YOUR_API_KEY",
             authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
             projectId: "YOUR_PROJECT_ID",
             storageBucket: "YOUR_PROJECT_ID.appspot.com",
             messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
@@ -69,31 +57,41 @@
 
         // 初始化 Firebase
         const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database(app);
+        const db = firebase.firestore(app);
 
-        // 計算並儲存總價
-        function calculatePrice() {
-            var itemPrice = parseInt(document.getElementById('item').value);
-            var quantity = parseInt(document.getElementById('quantity').value);
-            var total = itemPrice * quantity;
-            document.getElementById('totalPrice').textContent = total;
-
-            // 儲存到 Firebase Realtime Database
-            const totalPriceRef = database.ref('orders').push();
-            totalPriceRef.set({
-                itemPrice: itemPrice,
-                quantity: quantity,
-                total: total,
-                timestamp: new Date().toISOString()
-            })
-            .then(() => {
-                alert('訂單已儲存至 Firebase!');
-            })
-            .catch((error) => {
-                console.error('儲存資料時發生錯誤：', error);
-            });
-        }
+        new Vue({
+            el: '#app',
+            data: {
+                date: '',
+                name: '',
+                weight: 0,
+                amount: 0,
+                pricePerGram: null
+            },
+            methods: {
+                calculateAndSave() {
+                    if (this.weight > 0 && this.amount > 0) {
+                        this.pricePerGram = (this.amount / this.weight).toFixed(2);
+                        this.saveData();
+                    } else {
+                        alert('請確認輸入的數據正確');
+                    }
+                },
+                saveData() {
+                    db.collection("purchases").add({
+                        date: this.date,
+                        name: this.name,
+                        weight: this.weight,
+                        amount: this.amount,
+                        pricePerGram: this.pricePerGram
+                    }).then(() => {
+                        alert("資料儲存成功！");
+                    }).catch((error) => {
+                        alert("儲存資料時出錯: " + error);
+                    });
+                }
+            }
+        });
     </script>
-
 </body>
 </html>
