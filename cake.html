@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>材料價格計算</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database.js"></script>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         .container { width: 500px; margin: 0 auto; }
@@ -40,35 +38,19 @@
                 <button @click="calculate">計算</button>
                 <button @click="saveData">儲存</button>
             </div>
-            <div v-if="pricePerGram !== ''">
+            <div v-if="pricePerGram !== null">
                 <p>每克價格: {{ pricePerGram }} NTD/g</p>
             </div>
             <h3>歷史記錄</h3>
             <ul>
                 <li v-for="(entry, index) in history" :key="index">
-                    {{ entry.date }} - {{ entry.name }}: {{ entry.weight }} g, {{ entry.amount }} NTD, 每克價格: {{ entry.pricePerGram }} NTD/g
+                    {{ entry.date }} - {{ entry.name }}: {{ entry.pricePerGram }} NTD/g
                 </li>
             </ul>
         </div>
     </div>
 
     <script>
-        // Firebase 配置
-        const firebaseConfig = {
-            apiKey: "AIzaSyC_S1tr4bL7oJE4q_erTVzYZ6MIsBQDF1Y",
-            authDomain: "dessert-515c4.firebaseapp.com",
-            databaseURL: "https://dessert-515c4-default-rtdb.firebaseio.com",
-            projectId: "dessert-515c4",
-            storageBucket: "dessert-515c4.firebasestorage.app",
-            messagingSenderId: "710755169317",
-            appId: "1:710755169317:web:e02723370229034f4dfbcc",
-            measurementId: "G-YBCB593TBX"
-        };
-
-        // 初始化 Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database(app);
-
         new Vue({
             el: '#app',
             data: {
@@ -76,55 +58,30 @@
                 name: '',
                 weight: 0,
                 amount: 0,
-                pricePerGram: "", // 預設為空字串，確保 Vue 正常渲染
-                history: []
+                pricePerGram: null,
+                history: JSON.parse(localStorage.getItem('history')) || []
             },
             methods: {
                 calculate() {
                     if (this.weight > 0 && this.amount > 0) {
                         this.pricePerGram = (this.amount / this.weight).toFixed(2);
-                        console.log("計算後的每克價格: ", this.pricePerGram);
                     } else {
                         alert('請確認輸入的數據正確');
                     }
                 },
                 saveData() {
-                    if (this.date && this.name && this.weight > 0 && this.amount > 0 && this.pricePerGram !== '') {
+                    if (this.date && this.name && this.pricePerGram !== null) {
                         const newEntry = {
                             date: this.date,
                             name: this.name,
-                            weight: this.weight,
-                            amount: this.amount,
                             pricePerGram: this.pricePerGram
                         };
-                        
-                        // 儲存資料到 Firebase
-                        const newHistoryRef = database.ref('history').push();
-                        newHistoryRef.set(newEntry).then(() => {
-                            this.history.push(newEntry);
-                            alert('資料已儲存');
-                        }).catch(error => {
-                            alert('儲存資料時發生錯誤: ' + error.message);
-                        });
+                        this.history.push(newEntry);
+                        localStorage.setItem('history', JSON.stringify(this.history));
                     } else {
-                        alert('請確認所有欄位已正確填寫並計算價格');
+                        alert('請先計算價格再儲存');
                     }
-                },
-                fetchHistory() {
-                    // 從 Firebase 讀取歷史資料
-                    database.ref('history').once('value', snapshot => {
-                        const data = snapshot.val();
-                        if (data) {
-                            this.history = Object.values(data);
-                            console.log("讀取到的歷史資料: ", this.history);
-                        }
-                    }).catch(error => {
-                        console.error("讀取 Firebase 數據失敗: ", error);
-                    });
                 }
-            },
-            mounted() {
-                this.fetchHistory(); // 初始化時讀取歷史資料
             }
         });
     </script>
