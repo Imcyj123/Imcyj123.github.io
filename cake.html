@@ -4,8 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>材料價格計算</title>
-    <script src="https://www.gstatic.com/firebasejs/9.7.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.7.0/firebase-firestore.js"></script>
+    <!-- Firebase SDK -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.7.0/firebase-app.js";
+      import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.7.0/firebase-firestore.js";
+      
+      // Your Firebase config
+      const firebaseConfig = {
+        apiKey: "AIzaSyC_S1tr4bL7oJE4q_erTVzYZ6MIsBQDF1Y",
+        authDomain: "dessert-515c4.firebaseapp.com",
+        databaseURL: "https://dessert-515c4-default-rtdb.firebaseio.com",
+        projectId: "dessert-515c4",
+        storageBucket: "dessert-515c4.firebasestorage.app",
+        messagingSenderId: "710755169317",
+        appId: "1:710755169317:web:0445013be1c00ac14dfbcc",
+        measurementId: "G-77VWS6FC67"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      // Expose db to the global window object
+      window.db = db;
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
@@ -46,19 +69,6 @@
     </div>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        // 初始化 Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore(app);
-
         new Vue({
             el: '#app',
             data: {
@@ -71,24 +81,27 @@
             methods: {
                 calculateAndSave() {
                     if (this.weight > 0 && this.amount > 0) {
+                        // 計算每克價格
                         this.pricePerGram = (this.amount / this.weight).toFixed(2);
                         this.saveData();
                     } else {
                         alert('請確認輸入的數據正確');
                     }
                 },
-                saveData() {
-                    db.collection("purchases").add({
-                        date: this.date,
-                        name: this.name,
-                        weight: this.weight,
-                        amount: this.amount,
-                        pricePerGram: this.pricePerGram
-                    }).then(() => {
+                async saveData() {
+                    try {
+                        // 將資料儲存到 Firebase Firestore
+                        const docRef = await addDoc(collection(window.db, "purchases"), {
+                            date: this.date,
+                            name: this.name,
+                            weight: this.weight,
+                            amount: this.amount,
+                            pricePerGram: this.pricePerGram
+                        });
                         alert("資料儲存成功！");
-                    }).catch((error) => {
-                        alert("儲存資料時出錯: " + error);
-                    });
+                    } catch (e) {
+                        alert("儲存資料時出錯: " + e);
+                    }
                 }
             }
         });
