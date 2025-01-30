@@ -36,10 +36,17 @@
             </div>
             <div class="form-group">
                 <button @click="calculate">計算</button>
+                <button @click="saveData">儲存</button>
             </div>
             <div v-if="pricePerGram !== null">
                 <p>每克價格: {{ pricePerGram }} NTD/g</p>
             </div>
+            <h3>歷史記錄</h3>
+            <ul>
+                <li v-for="(entry, index) in history" :key="index">
+                    {{ entry.date }} - {{ entry.name }}: {{ entry.pricePerGram }} NTD/g
+                </li>
+            </ul>
         </div>
     </div>
 
@@ -51,7 +58,8 @@
                 name: '',
                 weight: 0,
                 amount: 0,
-                pricePerGram: null
+                pricePerGram: null,
+                history: JSON.parse(localStorage.getItem('history')) || []
             },
             methods: {
                 calculate() {
@@ -59,6 +67,19 @@
                         this.pricePerGram = (this.amount / this.weight).toFixed(2);
                     } else {
                         alert('請確認輸入的數據正確');
+                    }
+                },
+                saveData() {
+                    if (this.date && this.name && this.pricePerGram !== null) {
+                        const newEntry = {
+                            date: this.date,
+                            name: this.name,
+                            pricePerGram: this.pricePerGram
+                        };
+                        this.history.push(newEntry);
+                        localStorage.setItem('history', JSON.stringify(this.history));
+                    } else {
+                        alert('請先計算價格再儲存');
                     }
                 }
             }
