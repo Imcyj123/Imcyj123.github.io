@@ -90,7 +90,7 @@
                 },
                 async saveData() {
                     try {
-                        // 將資料儲存到 Firebase Firestore
+                        // 正確儲存資料到 Firebase Firestore
                         const docRef = await addDoc(collection(window.db, "purchases"), {
                             date: this.date,
                             name: this.name,
