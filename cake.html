@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>簡單計價網頁</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        label, select, input, button {
+            margin: 10px 0;
+            width: 100%;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>計價工具</h2>
+        <label for="item">選擇商品：</label>
+        <select id="item">
+            <option value="100">商品 A - $100</option>
+            <option value="200">商品 B - $200</option>
+            <option value="300">商品 C - $300</option>
+        </select>
+
+        <label for="quantity">數量：</label>
+        <input type="number" id="quantity" value="1" min="1">
+
+        <button onclick="calculatePrice()">計算總價</button>
+
+        <h3>總價：<span id="totalPrice">0</span> 元</h3>
+    </div>
+
+    <script>
+        function calculatePrice() {
+            var itemPrice = parseInt(document.getElementById('item').value);
+            var quantity = parseInt(document.getElementById('quantity').value);
+            var total = itemPrice * quantity;
+            document.getElementById('totalPrice').textContent = total;
+        }
+    </script>
+
+</body>
+</html>
