@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帳號驗證</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+        
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        
+        new Vue({
+            el: '#app',
+            data: {
+                account: '',
+                password: '',
+                message: ''
+            },
+            methods: {
+                login() {
+                    signInWithEmailAndPassword(auth, this.account, this.password)
+                        .then(userCredential => {
+                            this.message = '登入成功，歡迎 ' + userCredential.user.email;
+			    window.location.href = '/cake.html';
+                        })
+                        .catch(error => {
+                            this.message = '登入失敗: ' + error.message;
+                        });
+                }
+            }
+        });
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { width: 300px; margin: 0 auto; }
+        .form-group { margin-bottom: 10px; }
+        input { width: 100%; padding: 8px; }
+        button { padding: 10px 15px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>帳號驗證</h2>
+        <div id="app">
+            <div class="form-group">
+                <label for="account">帳號 (Email)</label>
+                <input type="email" v-model="account" id="account">
+            </div>
+            <div class="form-group">
+                <label for="password">密碼</label>
+                <input type="password" v-model="password" id="password">
+            </div>
+            <div class="form-group">
+                <button @click="login">登入</button>
+            </div>
+            <p v-if="message">{{ message }}</p>
+        </div>
+    </div>
+</body>
+</html>
