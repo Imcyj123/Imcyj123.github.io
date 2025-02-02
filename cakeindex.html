@@ -37,13 +37,12 @@
                 login() {
                     signInWithEmailAndPassword(auth, this.account, this.password)
                         .then(userCredential => {
-                            this.message = '登入成功，歡迎 ' + userCredential.user.email;
-                            this.fetchUserData(userCredential.user.uid);
+                            this.message = '登入成功，歡迎 ' + userCredential.this.account;
+                            this.fetchUserData(userCredential.this.account);
                             setTimeout(() => { window.location.href = '/cake.html'; }, 1000);
                         })
                         .catch(error => {
                             this.message = '登入失敗: ' + error.message;
-							this.message = this.account + '  ' + this.password;
                         });
                 },
                 fetchUserData(userId) {
