@@ -46,7 +46,7 @@
                         });
                 },
                 fetchUserData(userId) {
-                    const userRef = ref(db, 'users/' + userId);
+                    const userRef = ref(db, 'user/' + userId);
                     get(userRef)
                         .then(snapshot => {
                             if (snapshot.exists()) {
