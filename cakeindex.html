@@ -8,8 +8,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
-        
+
         const firebaseConfig = {
             apiKey: "AIzaSyC_S1tr4bL7oJE4q_erTVzYZ6MIsBQDF1Y",
             authDomain: "dessert-515c4.firebaseapp.com",
@@ -20,39 +19,41 @@
             appId: "1:710755169317:web:5acc04f9b6cae3774dfbcc",
             measurementId: "G-WKQ3DVBHT5"
         };
-        
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getDatabase(app);
-        
+
         new Vue({
-			el: '#app',
-			data: {
-				account: '',
-				password: '',
-				message: '',
-				userData: null
-			},
-			methods: {
-				async login() {
-					try {
-						const userCredential = await signInWithEmailAndPassword(auth, this.account, this.password);
-						const user = userCredential.user;
-						this.message = "登入成功！";
-
-						// 儲存 UID 到 localStorage
-						localStorage.setItem("uid", user.uid);
-
-						setTimeout(() => {
-							window.location.href = "./cake.html";
-						}, 1000);
-					} catch (error) {
-						this.message = "登入失敗：" + error.message;
-					}
-				}
-			}
-		});
-
+            el: '#app',
+            data: {
+                account: '',
+                password: '',
+                message: ''
+            },
+            methods: {
+                async login() {
+                    try {
+                        const userCredential = await signInWithEmailAndPassword(auth, this.account, this.password);
+                        const user = userCredential.user;
+                        localStorage.setItem("uid", user.uid); // 存儲 UID
+                        this.message = "登入成功！";
+                        setTimeout(() => {
+                            window.location.href = "./cake.html";
+                        }, 1000);
+                    } catch (error) {
+                        this.message = "登入失敗：" + error.message;
+                    }
+                }
+            },
+            mounted() {
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        localStorage.setItem("uid", user.uid);
+                        window.location.href = "./cake.html"; // 已登入則直接進入
+                    }
+                });
+            }
+        });
     </script>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
@@ -79,11 +80,6 @@
                 <button @click="login">登入</button>
             </div>
             <p v-if="message">{{ message }}</p>
-            <div v-if="userData">
-                <h3>使用者資料</h3>
-                <p>名稱: {{ userData.name }}</p>
-                <p>Email: {{ userData.email }}</p>
-            </div>
         </div>
     </div>
 </body>
