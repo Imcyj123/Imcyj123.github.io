@@ -120,8 +120,12 @@
 				},
 				logout() {
 					localStorage.removeItem("uid");
-					alert("已登出！");
-					window.location.href = "./cakeindex.html";
+					console.log("登出成功！");
+
+					// 等待清除完成後再跳轉
+					setTimeout(() => {
+						window.location.href = "./cakeindex.html";
+					}, 100); // 延遲 100 毫秒再進行跳轉
 				},
 				// 新增刪除方法
 				deleteData(entry, index) {
@@ -147,14 +151,14 @@
 				}
 			},
             mounted() {
-                const uid = localStorage.getItem("uid");
-                if (!uid) {
-                    alert("請先登入！");
-                    window.location.href = "./cakeindex.html";
-                    return;
-                }
-                this.fetchData();
-            }
+				const uid = localStorage.getItem("uid");
+				if (!uid) {
+					alert("您尚未登入，請先登入！");
+					window.location.href = "./cakeindex.html";
+				} else {
+					this.fetchData(); // 只有當 uid 存在時才載入資料
+				}
+			}
         });
     </script>
 
