@@ -73,62 +73,74 @@
         };
 
         // 初始化 Firebase
-        // const app = initializeApp(firebaseConfig);
+        const app = initializeApp(firebaseConfig);
 		const auth = getAuth(app);
         const db = getDatabase(app);
 
         // Vue 實例
-		new Vue({
-			el: '#app',
-			data: {
-				userData: null,
-				date: '',
-				name: '',
-				weight: 0,
-				amount: 0,
-				pricePerGram: null,
-				history: []
-			},
-			methods: {
-				async fetchUserData(uid) {
-					try {
-						const userRef = ref(db, 'users/' + uid);
-						const snapshot = await get(userRef);
-						if (snapshot.exists()) {
-							this.userData = snapshot.val();
-							console.log("讀取使用者資料:", this.userData);
-						} else {
-							console.log("沒有找到使用者資料");
-						}
-					} catch (error) {
-						console.error("讀取失敗：", error);
-					}
-				},
-				fetchData() {
-					get(ref(db, 'materials'))
-						.then((snapshot) => {
-							if (snapshot.exists()) {
-								this.history = Object.values(snapshot.val());
-							} else {
-								console.log("沒有材料資料");
-							}
-						})
-						.catch((error) => {
-							console.error("讀取材料資料失敗：", error);
-						});
-				}
-			},
-			mounted() {
-				const uid = localStorage.getItem("uid");
-				if (uid) {
-					this.fetchUserData(uid);
-				} else {
-					alert("未登入，請先登入！");
-					window.location.href = "./cakeindex.html";
-				}
-				this.fetchData();
-			}
-		});
+        new Vue({
+            el: '#app',
+            data: {
+                date: '',
+                name: '',
+                weight: 0,
+                amount: 0,
+                pricePerGram: null,
+                history: []
+            },
+            methods: {
+                // 計算每克價格
+                calculate() {
+                    if (this.weight > 0 && this.amount > 0) {
+                        this.pricePerGram = (this.amount / this.weight).toFixed(2);
+                    } else {
+                        alert('請確認輸入的數據正確');
+                    }
+                },
+                // 儲存數據到 Firebase
+                saveData() {
+                    if (this.date && this.name && this.pricePerGram !== null) {
+                        const newEntry = {
+                            date: this.date,
+                            name: this.name,
+                            weight: this.weight,
+                            amount: this.amount,
+                            pricePerGram: this.pricePerGram
+                        };
+
+                        // Firebase 資料庫路徑
+                        const newPostKey = push(ref(db, 'materials')).key;
+                        set(ref(db, 'materials/' + newPostKey), newEntry)
+                            .then(() => {
+                                alert('資料已儲存到 Firebase');
+                                this.history.push(newEntry);
+                            })
+                            .catch(error => {
+                                console.error("儲存失敗：", error);
+                            });
+                    } else {
+                        alert('請先計算價格再儲存');
+                    }
+                },
+                // 從 Firebase 讀取數據
+                fetchData() {
+                    get(ref(db, 'materials'))
+                        .then((snapshot) => {
+                            if (snapshot.exists()) {
+                                this.history = Object.values(snapshot.val()); // 轉換為陣列
+                            } else {
+                                console.log("沒有資料");
+                            }
+                        })
+                        .catch((error) => {
+                            console.error("讀取失敗：", error);
+                        });
+                }
+            },
+            mounted() {
+                this.fetchData(); // 初始化時載入 Firebase 資料
+            }
+        });
     </script>
 </body>
 </html>
