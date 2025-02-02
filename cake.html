@@ -35,7 +35,8 @@
             <h3>歷史記錄</h3>
             <ul>
                 <li v-for="(entry, index) in history" :key="index">
-                    {{ entry.date }} - {{ entry.name }}: {{ entry.pricePerGram }} NTD/g  還有 {{ entry.remaining }} 公克
+                    {{ entry.date }} <br> {{ entry.name }}: {{ entry.pricePerGram }} NTD/g  還有 {{ entry.remaining }} 公克
+					<button @click="deleteData(entry, index)">刪除</button>
                 </li>
             </ul>
         </div>
@@ -70,59 +71,80 @@
                 history: []
             },
             methods: {
-                calculate() {
-                    if (this.weight > 0 && this.amount > 0) {
-                        this.pricePerGram = (this.amount / this.weight).toFixed(2);
-                    } else {
-                        alert('請確認輸入的數據正確');
-                    }
-                },
-                saveData() {
-                    const uid = localStorage.getItem("uid");
-                    if (!uid) {
-                        alert("請先登入！");
-                        window.location.href = "./cakeindex.html";
-                        return;
-                    }
+				calculate() {
+					if (this.weight > 0 && this.amount > 0) {
+						this.pricePerGram = (this.amount / this.weight).toFixed(2);
+					} else {
+						alert('請確認輸入的數據正確');
+					}
+				},
+				saveData() {
+					const uid = localStorage.getItem("uid");
+					if (!uid) {
+						alert("請先登入！");
+						window.location.href = "./cakeindex.html";
+						return;
+					}
 
-                    const newEntry = {
-                        date: this.date,
-                        name: this.name,
-                        weight: this.weight,
-                        amount: this.amount,
-                        pricePerGram: this.pricePerGram,
-						remaining: this.weight
-                    };
+					const newEntry = {
+						date: this.date,
+						name: this.name,
+						weight: this.weight,
+						amount: this.amount,
+						pricePerGram: this.pricePerGram
+					};
 
-                    const newPostKey = push(ref(db, `users/${uid}/materials`)).key;
-                    set(ref(db, `users/${uid}/materials/${newPostKey}`), newEntry)
-                        .then(() => {
-                            alert("資料已儲存！");
-                            this.history.push(newEntry);
-                        })
-                        .catch(error => {
-                            console.error("儲存失敗：", error);
-                        });
-                },
-                fetchData() {
-                    const uid = localStorage.getItem("uid");
-                    if (!uid) {
-                        alert("請先登入！");
-                        window.location.href = "./cakeindex.html";
-                        return;
-                    }
-                    get(ref(db, `users/${uid}/materials`)).then(snapshot => {
-                        if (snapshot.exists()) {
-                            this.history = Object.values(snapshot.val());
-                        }
-                    });
-                },
-                logout() {
-                    localStorage.removeItem("uid");
-                    alert("已登出！");
-                    window.location.href = "./cakeindex.html";
-                }
-            },
+					const newPostKey = push(ref(db, `users/${uid}/materials`)).key;
+					set(ref(db, `users/${uid}/materials/${newPostKey}`), newEntry)
+						.then(() => {
+							alert("資料已儲存！");
+							this.history.push(newEntry);
+						})
+						.catch(error => {
+							console.error("儲存失敗：", error);
+						});
+				},
+				fetchData() {
+					const uid = localStorage.getItem("uid");
+					if (!uid) {
+						alert("請先登入！");
+						window.location.href = "./cakeindex.html";
+						return;
+					}
+					get(ref(db, `users/${uid}/materials`)).then(snapshot => {
+						if (snapshot.exists()) {
+							this.history = Object.values(snapshot.val());
+						}
+					});
+				},
+				logout() {
+					localStorage.removeItem("uid");
+					alert("已登出！");
+					window.location.href = "./cakeindex.html";
+				},
+				// 新增刪除方法
+				deleteData(entry, index) {
+					const uid = localStorage.getItem("uid");
+					if (!uid) {
+						alert("請先登入！");
+						window.location.href = "./cakeindex.html";
+						return;
+					}
+					
+					const entryKey = Object.keys(this.history)[index];
+					if (entryKey) {
+						const dataRef = ref(db, `users/${uid}/materials/${entryKey}`);
+						remove(dataRef)
+							.then(() => {
+								alert("資料已刪除！");
+								this.history.splice(index, 1); // 從本地歷史紀錄移除
+							})
+							.catch(error => {
+								console.error("刪除失敗：", error);
+							});
+					}
+				}
+			},
             mounted() {
                 const uid = localStorage.getItem("uid");
                 if (!uid) {
