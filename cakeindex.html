@@ -7,7 +7,8 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
         
         const firebaseConfig = {
             apiKey: "AIzaSyC_S1tr4bL7oJE4q_erTVzYZ6MIsBQDF1Y",
@@ -22,25 +23,50 @@
         
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getDatabase(app);
         
         new Vue({
             el: '#app',
             data: {
                 account: '',
                 password: '',
-                message: ''
+                message: '',
+                userData: null
             },
             methods: {
                 login() {
                     signInWithEmailAndPassword(auth, this.account, this.password)
                         .then(userCredential => {
                             this.message = '登入成功，歡迎 ' + userCredential.user.email;
-			    window.location.href = '/cake.html';
+                            this.fetchUserData(userCredential.user.uid);
+                            setTimeout(() => { window.location.href = 'cake.html'; }, 1000);
                         })
                         .catch(error => {
                             this.message = '登入失敗: ' + error.message;
                         });
+                },
+                fetchUserData(userId) {
+                    const userRef = ref(db, 'users/' + userId);
+                    get(userRef)
+                        .then(snapshot => {
+                            if (snapshot.exists()) {
+                                this.userData = snapshot.val();
+                                console.log('使用者資料:', this.userData);
+                            } else {
+                                console.log('無使用者資料');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('獲取使用者資料失敗:', error);
+                        });
                 }
+            },
+            mounted() {
+                onAuthStateChanged(auth, user => {
+                    if (user) {
+                        this.fetchUserData(user.uid);
+                    }
+                });
             }
         });
     </script>
@@ -69,6 +95,11 @@
                 <button @click="login">登入</button>
             </div>
             <p v-if="message">{{ message }}</p>
+            <div v-if="userData">
+                <h3>使用者資料</h3>
+                <p>名稱: {{ userData.name }}</p>
+                <p>Email: {{ userData.email }}</p>
+            </div>
         </div>
     </div>
 </body>
