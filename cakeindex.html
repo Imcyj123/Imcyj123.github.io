@@ -38,35 +38,18 @@
 					try {
 						const userCredential = await signInWithEmailAndPassword(auth, this.account, this.password);
 						const user = userCredential.user;
-						this.message = "登入成功！"
-						// this.fetchUserData(user.uid);
+						this.message = "登入成功！";
+
+						// 儲存 UID 到 localStorage
+						localStorage.setItem("uid", user.uid);
+
 						setTimeout(() => {
 							window.location.href = "./cake.html";
-						}, 1000); 
+						}, 1000);
 					} catch (error) {
 						this.message = "登入失敗：" + error.message;
 					}
-				},
-//				async fetchUserData(uid) {
-//					try {
-//						const userRef = ref(db, 'users/' + uid); // 假設使用者資料儲存在 `users/{uid}`
-//						const snapshot = await get(userRef);
-//						if (snapshot.exists()) {
-//							this.userData = snapshot.val();
-//						} else {
-//							this.message = "無法獲取使用者資料";
-//						}
-//					} catch (error) {
-//						this.message = "獲取資料錯誤：" + error.message;
-//					}
-//				}
-//			},
-//			mounted() {
-//				onAuthStateChanged(auth, user => {
-//					if (user) {
-//						this.fetchUserData(user.uid);
-//					}
-//				});
+				}
 			}
 		});
 
