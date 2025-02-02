@@ -37,8 +37,8 @@
                 login() {
                     signInWithEmailAndPassword(auth, this.account, this.password)
                         .then(userCredential => {
-                            this.message = '登入成功，歡迎 ' + userCredential.this.account;
-                            this.fetchUserData(userCredential.this.account);
+                            this.message = '登入成功，歡迎 ' + this.account;
+                            this.fetchUserData(this.account);
                             setTimeout(() => { window.location.href = '/cake.html'; }, 1000);
                         })
                         .catch(error => {
