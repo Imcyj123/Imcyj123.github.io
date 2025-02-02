@@ -5,18 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>材料價格計算</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .container { width: 500px; margin: 0 auto; }
-        .form-group { margin-bottom: 10px; }
-        input { width: 100%; padding: 8px; }
-        button { padding: 10px 15px; background-color: #4CAF50; color: white; border: none; cursor: pointer; }
-        button:hover { background-color: #45a049; }
-    </style>
 </head>
 <body>
     <div class="container">
         <h2>材料價格計算器</h2>
+        <button @click="logout">登出</button>
         <div id="app">
             <div class="form-group">
                 <label for="date">購買日期</label>
@@ -34,10 +27,8 @@
                 <label for="amount">購買金額 (NTD)</label>
                 <input type="number" v-model="amount" id="amount" step="0.01">
             </div>
-            <div class="form-group">
-                <button @click="calculate">計算</button>
-                <button @click="saveData">儲存</button>
-            </div>
+            <button @click="calculate">計算</button>
+            <button @click="saveData">儲存</button>
             <div v-if="pricePerGram !== null">
                 <p>每克價格: {{ pricePerGram }} NTD/g</p>
             </div>
@@ -50,17 +41,10 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script type="module">
-        // 引入 Firebase 套件
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-        // import { getDatabase, ref, set, push, get } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
-		import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
-		import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
+        import { getDatabase, ref, set, push, get } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
 
-
-
-        // Firebase 配置
         const firebaseConfig = {
             apiKey: "AIzaSyC_S1tr4bL7oJE4q_erTVzYZ6MIsBQDF1Y",
             authDomain: "dessert-515c4.firebaseapp.com",
@@ -72,12 +56,9 @@
             measurementId: "G-WKQ3DVBHT5"
         };
 
-        // 初始化 Firebase
         const app = initializeApp(firebaseConfig);
-		const auth = getAuth(app);
         const db = getDatabase(app);
 
-        // Vue 實例
         new Vue({
             el: '#app',
             data: {
@@ -89,7 +70,6 @@
                 history: []
             },
             methods: {
-                // 計算每克價格
                 calculate() {
                     if (this.weight > 0 && this.amount > 0) {
                         this.pricePerGram = (this.amount / this.weight).toFixed(2);
@@ -97,48 +77,40 @@
                         alert('請確認輸入的數據正確');
                     }
                 },
-                // 儲存數據到 Firebase
                 saveData() {
-                    if (this.date && this.name && this.pricePerGram !== null) {
-                        const newEntry = {
-                            date: this.date,
-                            name: this.name,
-                            weight: this.weight,
-                            amount: this.amount,
-                            pricePerGram: this.pricePerGram
-                        };
-
-                        // Firebase 資料庫路徑
-                        const newPostKey = push(ref(db, 'materials')).key;
-                        set(ref(db, 'materials/' + newPostKey), newEntry)
-                            .then(() => {
-                                alert('資料已儲存到 Firebase');
-                                this.history.push(newEntry);
-                            })
-                            .catch(error => {
-                                console.error("儲存失敗：", error);
-                            });
-                    } else {
-                        alert('請先計算價格再儲存');
+                    const uid = localStorage.getItem("uid");
+                    if (!uid) {
+                        alert("請先登入！");
+                        window.location.href = "./cakeindex.html";
+                        return;
                     }
+
+                    const newEntry = {
+                        date: this.date,
+                        name: this.name,
+                        weight: this.weight,
+                        amount: this.amount,
+                        pricePerGram: this.pricePerGram
+                    };
+
+                    const newPostKey = push(ref(db, `users/${uid}/materials`)).key;
+                    set(ref(db, `users/${uid}/materials/${newPostKey}`), newEntry);
                 },
-                // 從 Firebase 讀取數據
                 fetchData() {
-                    get(ref(db, 'materials'))
-                        .then((snapshot) => {
-                            if (snapshot.exists()) {
-                                this.history = Object.values(snapshot.val()); // 轉換為陣列
-                            } else {
-                                console.log("沒有資料");
-                            }
-                        })
-                        .catch((error) => {
-                            console.error("讀取失敗：", error);
-                        });
+                    const uid = localStorage.getItem("uid");
+                    get(ref(db, `users/${uid}/materials`)).then(snapshot => {
+                        if (snapshot.exists()) {
+                            this.history = Object.values(snapshot.val());
+                        }
+                    });
+                },
+                logout() {
+                    localStorage.removeItem("uid");
+                    window.location.href = "./cakeindex.html";
                 }
             },
             mounted() {
-                this.fetchData(); // 初始化時載入 Firebase 資料
+                this.fetchData();
             }
         });
     </script>
