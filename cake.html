@@ -90,7 +90,8 @@
                         name: this.name,
                         weight: this.weight,
                         amount: this.amount,
-                        pricePerGram: this.pricePerGram
+                        pricePerGram: this.pricePerGram,
+						remaining: this.weight
                     };
 
                     const newPostKey = push(ref(db, `users/${uid}/materials`)).key;
