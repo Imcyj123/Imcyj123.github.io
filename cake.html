@@ -94,10 +94,22 @@
                     };
 
                     const newPostKey = push(ref(db, `users/${uid}/materials`)).key;
-                    set(ref(db, `users/${uid}/materials/${newPostKey}`), newEntry);
+                    set(ref(db, `users/${uid}/materials/${newPostKey}`), newEntry)
+                        .then(() => {
+                            alert("資料已儲存！");
+                            this.history.push(newEntry);
+                        })
+                        .catch(error => {
+                            console.error("儲存失敗：", error);
+                        });
                 },
                 fetchData() {
                     const uid = localStorage.getItem("uid");
+                    if (!uid) {
+                        alert("請先登入！");
+                        window.location.href = "./cakeindex.html";
+                        return;
+                    }
                     get(ref(db, `users/${uid}/materials`)).then(snapshot => {
                         if (snapshot.exists()) {
                             this.history = Object.values(snapshot.val());
@@ -106,15 +118,23 @@
                 },
                 logout() {
                     localStorage.removeItem("uid");
+                    alert("已登出！");
                     window.location.href = "./cakeindex.html";
                 }
             },
             mounted() {
+                const uid = localStorage.getItem("uid");
+                if (!uid) {
+                    alert("請先登入！");
+                    window.location.href = "./cakeindex.html";
+                    return;
+                }
                 this.fetchData();
             }
         });
     </script>
-	<style>
+
+    <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         .container { width: 300px; margin: 0 auto; }
         .form-group { margin-bottom: 10px; }
