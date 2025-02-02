@@ -38,7 +38,7 @@
 					try {
 						const userCredential = await signInWithEmailAndPassword(auth, this.account, this.password);
 						const user = userCredential.user;
-						this.message = "登入成功！" + window.location.href + "目前位置";
+						this.message = "登入成功！"
 						// this.fetchUserData(user.uid);
 						setTimeout(() => {
 							window.location.href = "./cake.html";
