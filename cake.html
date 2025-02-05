@@ -116,19 +116,16 @@
                         return;
                     }
 
-                    // 取得用戶資料
-                    get(ref(db, `users/${uid}/profile`)).then(snapshot => {
-                        if (snapshot.exists()) {
-                            this.userData = snapshot.val();  // 設定用戶資料
-                        }
-                    });
-
                     // 取得用戶的歷史記錄
                     get(ref(db, `users/${uid}/materials`)).then(snapshot => {
-                        if (snapshot.exists()) {
-                            this.history = Object.values(snapshot.val());
-                        }
-                    });
+						if (snapshot.exists()) {
+							const data = snapshot.val();
+							this.history = Object.keys(data).map(key => ({
+								key,  // 存儲 Firebase 資料的唯一鍵
+								...data[key]
+							}));
+						}
+					});
                 },
                 logout() {
                     // 清除 localStorage 和 cookie
@@ -147,20 +144,16 @@
                         window.location.href = "./cakeindex.html";
                         return;
                     }
-
-                    // 根據歷史資料中的索引來獲取資料的唯一鍵
-                    const entryKey = Object.keys(this.history)[index];
-                    if (entryKey) {
-                        const dataRef = ref(db, `users/${uid}/materials/${entryKey}`);
-                        remove(dataRef)
-                            .then(() => {
-                                alert("資料已刪除！");
-                                this.history.splice(index, 1); // 從本地歷史紀錄中移除
-                            })
-                            .catch(error => {
-                                console.error("刪除失敗：", error);
-                            });
-                    }
+					
+					const dataRef = ref(db, `users/${uid}/materials/${entry.key}`); // 使用正確的 Firebase key
+					remove(dataRef)
+						.then(() => {
+							alert("資料已刪除！");
+							this.history.splice(index, 1); // 從 Vue 陣列中移除該項
+						})
+						.catch(error => {
+							console.error("刪除失敗：", error);
+						});
                 }
             },
             mounted() {
