@@ -159,13 +159,16 @@
                 }
             },
             mounted() {
-                const uid = localStorage.getItem("uid");
-                if (!uid) {
-                    alert("您尚未登入，請先登入！");
-                    window.location.href = "./cakeindex.html";
-                } else {
-                    this.fetchData(); // 只有當 uid 存在時才載入資料
-                }
+                onAuthStateChanged(auth, (user) => {
+					if (user) {
+						this.userData.name = user.displayName || "會員";
+						localStorage.setItem("uid", user.uid);
+						this.fetchData();
+					} else {
+						alert("您尚未登入，請先登入！");
+						window.location.href = "./cakeindex.html";
+					}
+				});
             }
         });
     </script>
