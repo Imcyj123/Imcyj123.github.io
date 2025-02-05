@@ -46,7 +46,6 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-		import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
         import { getDatabase, ref, set, push, get, remove } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
 
         const firebaseConfig = {
@@ -61,7 +60,6 @@
         };
 
         const app = initializeApp(firebaseConfig);
-		const auth = getAuth(app);
         const db = getDatabase(app);
 
         new Vue({
@@ -73,7 +71,7 @@
                 amount: 0,
                 pricePerGram: null,
                 history: [],
-                userData: { name: "未登入" }  // 用來儲存用戶資料
+                userData: {}  // 用來儲存用戶資料
             },
             methods: {
                 calculate() {
@@ -159,16 +157,13 @@
                 }
             },
             mounted() {
-                onAuthStateChanged(auth, (user) => {
-					if (user) {
-						this.userData.name = user.displayName || "會員";
-						localStorage.setItem("uid", user.uid);
-						this.fetchData();
-					} else {
-						alert("您尚未登入，請先登入！");
-						window.location.href = "./cakeindex.html";
-					}
-				});
+                const uid = localStorage.getItem("uid");
+                if (!uid) {
+                    alert("您尚未登入，請先登入！");
+                    window.location.href = "./cakeindex.html";
+                } else {
+                    this.fetchData(); // 只有當 uid 存在時才載入資料
+                }
             }
         });
     </script>
