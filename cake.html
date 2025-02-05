@@ -46,6 +46,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+		import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js";
         import { getDatabase, ref, set, push, get, remove } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
 
         const firebaseConfig = {
@@ -60,6 +61,7 @@
         };
 
         const app = initializeApp(firebaseConfig);
+		const auth = getAuth(app);
         const db = getDatabase(app);
 
         new Vue({
@@ -71,7 +73,7 @@
                 amount: 0,
                 pricePerGram: null,
                 history: [],
-                userData: {}  // 用來儲存用戶資料
+                userData: { name: "未登入" }  // 用來儲存用戶資料
             },
             methods: {
                 calculate() {
