@@ -1,142 +1,326 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Imcyj123 Personal Homepage</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-		integrity="sha384-ezvSkd1ISwE2z47M2tkz/KzCXL1XCI1rXnK3iXEeTwKfoU/GpV7WoBdI9K9sdQV5" crossorigin="anonymous">
-	<!-- Bootstrap CSS -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<!-- Custom CSS -->
-	<style>
-		body {
-			background-color: #f8f9fa;
-		}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imcyj123 個人首頁</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 
-		.jumbotron {
-			background-image: url('images/sky.jpg');
-			background-repeat: no-repeat;
-            background-attachment: fixed;
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --light-gray: #f8f9fa;
+            --dark-gray: #343a40;
+        }
+
+        html {
+            /* 修正導覽列跳轉時的偏移 */
+            scroll-padding-top: 70px;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #ffffff;
+        }
+
+        /* 英雄區塊 */
+        .hero {
+            background: url('images/sky.jpg') no-repeat center center;
             background-size: cover;
-			color: #fff;
-		}
-		
-		p {
-			margin-bottom: 15px;
-		}
+            color: #fff;
+            padding: 100px 0;
+            text-align: center;
+        }
 
-		
-		ul.custom-list {
-            list-style-type: none; 
-            padding: 0;
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            object-fit: cover;
         }
-        ul.custom-list li {
+
+        .hero h1 {
+            font-weight: 700;
+            margin-top: 20px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        
+        .hero .lead {
+            font-weight: 400;
+            font-size: 1.25rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        /* 區塊通用樣式 */
+        section {
+            padding: 60px 0;
+        }
+
+        section h2 {
+            font-weight: 700;
+            margin-bottom: 40px;
+            text-align: center;
             position: relative;
-            padding-left: 35px;
-            margin-bottom: 15px;
-            font-size: 16px;
         }
-        ul.custom-list li::before {
-            content: '✓';
+        
+        section h2::after {
+            content: '';
+            width: 60px;
+            height: 4px;
+            background: var(--primary-color);
             position: absolute;
-            left: 0;
-            color: #4CAF50;
-            font-size: 20px; 
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
         }
-        .extra-content {
-            margin-top: 10px;
-            font-size: 14px; 
-            color: #555;
+
+        .section-bg {
+            background-color: var(--light-gray);
         }
-	</style>
+        
+        /* 卡片樣式 */
+        .card {
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-body {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-title {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .card-text {
+            flex-grow: 1;
+        }
+
+        .card .btn {
+            margin-top: auto;
+        }
+        
+        /* 聯絡資訊 */
+        #contact .contact-item a {
+            font-size: 1.1rem;
+            color: var(--dark-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        #contact .contact-item a:hover {
+            color: var(--primary-color);
+        }
+        
+        #contact .contact-item i {
+            width: 30px;
+        }
+        
+        /* 頁尾 */
+        footer {
+            background-color: var(--dark-gray);
+            color: #fff;
+            padding: 40px 0;
+        }
+        
+        footer a {
+            color: #fff;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: var(--primary-color);
+        }
+
+    </style>
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">Imcyj123</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#about">關於我</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#notes">我的筆記</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#research">心理相關</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#project">Side Project</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">聯絡我</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-	<!-- Navbar -->
-	<!--
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<div class="container">
-			<a class="navbar-brand" href="#">Imcyj123</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-				aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav ms-auto">
-					<li class="nav-item">
-						<a class="nav-link" href="#about">About Me</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#portfolio">Portfolio</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="#contact">Contact</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-	-->
+    <header class="hero">
+        <div class="container">
+            <!-- <img src="" alt="Profile Picture" class="profile-picture"> -->
+            <h1 class="display-4">Imcyj123's Blog</h1>
+            <p class="lead">Passionate Programmer & Lifelong Learner</p>
+        </div>
+    </header>
 
+    <section id="about">
+        <div class="container">
+            <h2 class="mb-4">關於我</h2>
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <p class="fs-5">我目前就讀於國立雲林科技大學資訊管理系，專注於演算法和程式語言，如 Java、Rust、C/C++ 和 Python。</p>
+                    <p class="fs-5">我熱衷於解決演算法問題和開發創新的解決方案，同時也致力於提升我的英語和法語能力。我期待在這個領域中不斷貢獻和成長！</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <section id="notes" class="section-bg">
+        <div class="container">
+            <h2>我的筆記</h2>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">DataMining</h5>
+                            <p class="card-text">有關機器學習課程的上課內容。</p>
+                            <a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/SkP7HGcGT" target="_blank" class="btn btn-outline-primary">閱讀筆記</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Java</h5>
+                            <p class="card-text">這是一個Java基礎相關的筆記。</p>
+                            <a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/ByspFKXe9" target="_blank" class="btn btn-outline-primary">閱讀筆記</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Rust</h5>
+                            <p class="card-text">這是一個Rust基礎相關的筆記。</p>
+                            <a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/HkQauLY7q" target="_blank" class="btn btn-outline-primary">閱讀筆記</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">狀態機</h5>
+                            <p class="card-text">這是"3301資訊科學基礎"的筆記。</p>
+                            <a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/rk2lbbjNC" target="_blank" class="btn btn-outline-primary">閱讀筆記</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-	<!-- Jumbotron -->
-	<div class="jumbotron text-center">
-		<img src="your-profile-picture.jpg" alt="Welcome" class="profile-picture">
-		<h1 class="display-4">Imcyj123's blog</h1>
-		<p class="lead">Programmer</p>
-	</div>
+    <section id="research">
+        <div class="container">
+            <h2>心理相關</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">心情溫度計 (BSRS-5)</h5>
+                            <p class="card-text">簡易心理健康篩選量表，快速評估您的心理狀態。</p>
+                            <a href="./BSRS.html" class="btn btn-primary">前往測驗</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">壓力檢測表</h5>
+                            <p class="card-text">評估您在不同生活層面感受到的壓力程度。</p>
+                            <a href="./pressure.html" class="btn btn-primary">前往測驗</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">貝克憂鬱量表 (BDI-II)</h5>
+                            <p class="card-text">廣泛使用的憂鬱症狀自我評估工具。</p>
+                            <a href="./BDI.html" class="btn btn-primary">前往測驗</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-	<!-- About Me Section -->
-	<section id="about" class="container mt-5">
-		<h2 class="mb-4">About Me</h2>
-		<p>I am currently studying at the School of Information Management at Yunlin University of Science and Technology, with a focus on algorithms and programming languages such as Java, Rust, C/C++, and Python.</p>
-		<p>I am passionate about solving algorithmic problems and developing innovative solutions.</p>
-		<p>In addition to my studies, I am improving my English skills and am proficient in French. My goal is to continually enhance my abilities and apply my knowledge in diverse areas. I am excited about the opportunities to contribute and grow in the field.</p>
+    <section id="project" class="section-bg">
+        <div class="container">
+            <h2>Side Project</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-6 col-lg-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Eng2Bopomofo</h5>
+                            <p class="card-text">一個將英文鍵盤輸入即時轉換為注音符號的網頁小工具。</p>
+                            <a href="./eng2bopomofo.html" class="btn btn-primary">查看專案</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact">
+        <div class="container text-center">
+            <h2>聯絡我</h2>
+            <p class="lead mb-4">歡迎透過以下方式與我聯繫！</p>
+            <div class="contact-item mb-3">
+                <a href="https://github.com/Imcyj123" target="_blank">
+                    <i class="fab fa-github"></i> Imcyj123
+                </a>
+            </div>
+            <div class="contact-item">
+                <a href="mailto:kurase3201@gmail.com">
+                    <i class="fas fa-envelope"></i> kurase3201@gmail.com
+                </a>
+            </div>
+        </div>
+    </section>
 
-	</section>
+    <footer class="text-center">
+        <div class="container">
+            <div class="social-icons mb-3">
+                <a href="https://github.com/Imcyj123" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                <a href="mailto:kurase3201@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+            </div>
+            <p>&copy; 2025 Imcyj123. All Rights Reserved.</p>
+        </div>
+    </footer>
 
-	<section id="about" class="container mt-5">
-		<h2 class="mb-4">我的筆記</h2>
-		<ul class="custom-list">
-			<li><a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/SkP7HGcGT" target="_blank">DataMining</a><div class="extra-content">有關機器學習課程的上課內容</div></li>
-			<li><a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/ByspFKXe9" target="_blank">Java</a><div class="extra-content">這是一個Java基礎相關的筆記</div></li>
-			<li><a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/HkQauLY7q" target="_blank">Rust</a><div class="extra-content">這是一個Rust基礎相關的筆記</div></li>
-			<li><a href="https://hackmd.io/@tnF354U0SlerY9BhCzG5VQ/rk2lbbjNC" target="_blank">狀態機</a><div class="extra-content">這是"3301資訊科學基礎"的筆記</div></li>
-		</ul>
-	</section>
-
-	<!-- Contact Section -->
-	<section id="about" class="container mt-5">
-		<h2 class="mb-4">心理相關</h2>
-		<li><a href="./BSRS.html">心情溫度計</a></li>
-		<li><a href="./pressure.html">壓力檢測表</a></li>
-		<li><a href="./BDI.html">貝克憂鬱量表</a></li>
-	</section>
-
-	<section id="about" class="container mt-5">
-		<h2 class="mb-4">side project</h2>
-		<li><a href="./eng2bopomofo.html">Eng2Bopomofo</a></li>
-	</section>
-	
-	<!-- <section id="about" class="container mt-5">
-		<h2 class="mb-4">計算價格</h2>
-		<li><a href="./cakeindex.html">糕點</a></li>
-	</section> -->
-	
-	<section id="contact" class="container mt-5">
-		<h2 class="mb-4">Contact</h2>
-		<p><i class="fa fa-github"><a href="https://github.com/Imcyj123">Imcyj123</i></a></p>
-		<p><i class="fa fa-envelope">kurase3201@gmail.com</i></p>
-	</section>
-
-	<!-- Bootstrap JS (optional) -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
