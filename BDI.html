@@ -1,46 +1,141 @@
 <!DOCTYPE html>
+<html lang="zh-Hant">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>貝克憂鬱量表</title>
+    <title>貝克憂鬱量表 (BDI-II)</title>
     <style>
-        body { 
-            font-family: sans-serif; 
-            padding: 20px;
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #FEF9E7;
+            color: #5D4037;
+            display: flex;
+            justify-content: center;
+            padding: 2rem 0;
+            margin: 0;
         }
-        table { 
-            width: 90%; 
-            margin: 20px auto; 
-            border-collapse: collapse; 
+        .container {
+            max-width: 800px;
+            width: 95%;
+            background-color: #FFFFFF;
+            padding: 2rem 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
         }
-        th, td { 
-            border: 1px solid #666; 
-            padding: 8px; 
-            text-align: start; 
-        }
-        th { 
-            background-color: skyblue; 
-            font-weight: bold; 
-        }
-        tr:nth-child(even) { 
-            background-color: #EBEBEB; 
-        }
-        .result-table {
-            width: 60%;
-            margin: 20px auto;
-        }
-        .highlight { 
-            background-color: #e0f7fa; 
-        }
-        .warning { 
-            color: red; 
-            font-weight: bold; 
+        h2 {
+            color: #E67E22;
             text-align: center;
-            margin: 10px;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .container > p {
+            text-align: center;
+            color: #795548;
+            margin-bottom: 2.5rem;
+        }
+        .question-block {
+            background-color: #fdf2f2;
+            border: 1px solid #FADBD8;
+            border-radius: 15px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .question-block:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.15);
+        }
+        .question-block h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #D35400;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+        .question-block label {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.75rem;
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+        }
+        .question-block label:hover {
+            background-color: #FFF9C4;
+        }
+        .question-block input[type="radio"] {
+            display: none;
+        }
+        .question-block label::before {
+            content: '';
+            display: inline-block;
+            flex-shrink: 0;
+            width: 22px;
+            height: 22px;
+            border: 2px solid #F39C12;
+            border-radius: 50%;
+            margin-right: 1rem;
+            transition: all 0.2s ease;
+        }
+        .question-block input[type="radio"]:checked + label {
+            background-color: #FDEBD0;
+            font-weight: 500;
+            border-color: #FAD7A0;
+        }
+        .question-block input[type="radio"]:checked + label::before {
+            background-color: #F39C12;
+            border-color: #F39C12;
+            transform: scale(1.1);
         }
         .score-display {
             text-align: center;
-            font-size: 1.2em;
-            margin: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 3rem 0;
+            padding: 1.5rem;
+            background-color: #E8F8F5;
+            border-radius: 15px;
+            color: #16A085;
+        }
+        #totalScore {
+            font-size: 2em;
+            color: #E67E22;
+        }
+        table.result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem auto;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border: none;
+            border-bottom: 1px solid #EAECEE;
+        }
+        th {
+            background-color: #85C1E9;
+            color: white;
+            font-weight: 700;
+        }
+        tr:nth-child(even) {
+            background-color: #F8F9F9;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .warning {
+            color: #C0392B;
+            font-weight: bold;
+            text-align: center;
+            margin: 1rem 0;
         }
     </style>
     <script>
@@ -57,179 +152,69 @@
             }
             return sum;
         }
-
         function updateScore() {
             const score = calculateScore();
             document.getElementById('totalScore').textContent = score;
             updateLevel(score);
         }
-
         function updateLevel(score) {
             let level = "";
-            if (score <= 13) {
-                level = "正常範圍：表示情緒狀態大致平穩";
-            } else if (score <= 19) {
-                level = "輕度憂鬱：表示可能有輕微的情緒波動或低潮，需要他人的關心與支持";
-            } else if (score <= 28) {
-                level = "中度憂鬱：建議尋求專業的協助";
-            } else {
-                level = "重度憂鬱：建議尋求專業醫師診斷與治療";
-            }
+            if (score <= 13) level = "正常範圍：表示情緒狀態大致平穩";
+            else if (score <= 19) level = "輕度憂鬱：表示可能有輕微的情緒波動或低潮，需要他人的關心與支持";
+            else if (score <= 28) level = "中度憂鬱：建議尋求專業的協助";
+            else level = "重度憂鬱：建議尋求專業醫師診斷與治療";
             document.getElementById('depressionLevel').textContent = level;
         }
-
         window.addEventListener('DOMContentLoaded', () => {
-            const radios = document.querySelectorAll('input[type="radio"]');
-            radios.forEach(radio => radio.addEventListener('change', updateScore));
+            document.querySelectorAll('input[type="radio"]').forEach(radio => radio.addEventListener('change', updateScore));
             updateScore();
         });
     </script>
 </head>
 <body>
-    <h2 style="text-align: center">貝克憂鬱量表(BDI-II)</h2>
-    <p style="text-align: center">請根據個人最近的狀況，選擇一個最適當的選項。</p>
+    <div class="container">
+        <h2>貝克憂鬱量表 (BDI-II)</h2>
+        <p>這是一個協助您了解身心狀態的工具，請根據最近的感受，輕鬆地選擇最符合您的選項。</p>
 
-    <form id="depressionForm">
-                <div>1</div>
-                    <label><input type="radio" name="q1" value="0" checked>0 我不感到難過</label><br>
-                    <label><input type="radio" name="q1" value="1">1 我感覺難過</label><br>
-                    <label><input type="radio" name="q1" value="2">2 我一直覺得難過且無法振作起來</label><br>
-                    <label><input type="radio" name="q1" value="3">3 我難過且不快樂，我不能忍受這種情形了</label><br>
-                <div>2</div>
-                    <label><input type="radio" name="q2" value="0" checked>0 對未來我並不感覺特別沮喪</label><br>
-                    <label><input type="radio" name="q2" value="1">1 對未來我感到沮喪</label><br>
-                    <label><input type="radio" name="q2" value="2">2 沒有任何事可讓我期盼</label><br>
-                    <label><input type="radio" name="q2" value="3">3 我覺得未來毫無希望，並且無法改善</label><br>
-                <div>3</div>
-                    <label><input type="radio" name="q3" value="0" checked>0 我不覺得自己是個失敗者</label><br>
-                    <label><input type="radio" name="q3" value="1">1 我比一般人害怕失敗</label><br>
-                    <label><input type="radio" name="q3" value="2">2 回想自己的生活，我所看到的都是一大堆失敗</label><br>
-                    <label><input type="radio" name="q3" value="3">3 我覺得自己是個徹底的失敗者</label><br>
-                <div>4</div>
-                    <label><input type="radio" name="q4" value="0" checked>0 我像過去一樣從一些事中得到滿足</label><br>
-                    <label><input type="radio" name="q4" value="1">1 我不像過去一樣對一些事感到喜悅</label><br>
-                    <label><input type="radio" name="q4" value="2">2 我不再從任何事中感到真正的滿足</label><br>
-                    <label><input type="radio" name="q4" value="3">3 我對任何事都感到煩躁不滿意</label><br>
-                <div>5</div>
-                    <label><input type="radio" name="q5" value="0" checked>0 我沒有罪惡感</label><br>
-                    <label><input type="radio" name="q5" value="1">1 偶爾我會有罪惡感</label><br>
-                    <label><input type="radio" name="q5" value="2">2 我常常有罪惡感</label><br>
-                    <label><input type="radio" name="q5" value="3">3 我總是感到罪惡</label><br>
-                <div>6</div>
-                    <label><input type="radio" name="q6" value="0" checked>0 我不覺得自己正在受罰</label><br>
-                    <label><input type="radio" name="q6" value="1">1 我覺得自己可能遭受報應</label><br>
-                    <label><input type="radio" name="q6" value="2">2 我希望受到報應</label><br>
-                    <label><input type="radio" name="q6" value="3">3 我覺得自己正在自食惡果</label><br>
-                <div>7</div>
-                    <label><input type="radio" name="q7" value="0" checked>0 我對自己並不感到失望</label><br>
-                    <label><input type="radio" name="q7" value="1">1 我對自己甚感失望</label><br>
-                    <label><input type="radio" name="q7" value="2">2 我討厭自己</label><br>
-                    <label><input type="radio" name="q7" value="3">3 我恨自己</label><br>
-                    <div>8</div>
-                    <label><input type="radio" name="q8" value="0" checked>0 我不覺得自己比別人差勁</label><br>
-                    <label><input type="radio" name="q8" value="1">1 我對自己的弱點或錯誤常常挑三揀四</label><br>
-                    <label><input type="radio" name="q8" value="2">2 我總是為了自己的缺失苛責自己</label><br>
-                    <label><input type="radio" name="q8" value="3">3 祇要出事就會歸咎於自己</label><br>
-                    <div>9</div>
-                    <label><input type="radio" name="q9" value="0" checked>0 我沒有任何想自殺的念頭</label><br>
-                    <label><input type="radio" name="q9" value="1">1 我想自殺，但我不會真的那麼做</label><br>
-                    <label><input type="radio" name="q9" value="2">2 我真想自殺</label><br>
-                    <label><input type="radio" name="q9" value="3">3 如果有機會，我要自殺</label><br>
-                    <div>10</div>
-                    <label><input type="radio" name="q10" value="0" checked>0 和平時比較，我哭的次數並無增加</label><br>
-                    <label><input type="radio" name="q10" value="1">1 我現在比以前常哭</label><br>
-                    <label><input type="radio" name="q10" value="2">2 現在我經常哭泣</label><br>
-                    <label><input type="radio" name="q10" value="3">3 過去我還能，但現在想哭都哭不出來了</label><br>
-                    <div>11</div>
-                    <label><input type="radio" name="q11" value="0" checked>0 我對任何事並不會比以前更易動怒</label><br>
-                    <label><input type="radio" name="q11" value="1">1 我比以前稍微有些脾氣暴躁</label><br>
-                    <label><input type="radio" name="q11" value="2">2 很多時候我相當苦惱或脾氣暴躁</label><br>
-                    <label><input type="radio" name="q11" value="3">3 目前我總是容易動怒</label><br>
-                    <div>12</div>
-                    <label><input type="radio" name="q12" value="0" checked>0 我關心他人</label><br>
-                    <label><input type="radio" name="q12" value="1">1 和以前比較我有點不關心別人</label><br>
-                    <label><input type="radio" name="q12" value="2">2 我關心別人的程度已大不如昔</label><br>
-                    <label><input type="radio" name="q12" value="3">3 我已不再關心他人</label><br>
-                    <div>13</div>
-                    <label><input type="radio" name="q13" value="0" checked>0 我做決定能像以前一樣好</label><br>
-                    <label><input type="radio" name="q13" value="1">1 我比以前會延後做決定的時間</label><br>
-                    <label><input type="radio" name="q13" value="2">2 我做決定比以前更感困難</label><br>
-                    <label><input type="radio" name="q13" value="3">3 我不再能做決定了</label><br>
-                    <div>14</div>
-                    <label><input type="radio" name="q14" value="0" checked>0 我不覺得自己比以前差勁</label><br>
-                    <label><input type="radio" name="q14" value="1">1 我擔心自己變老或不吸引人</label><br>
-                    <label><input type="radio" name="q14" value="2">2 我覺得自己的外表變得不再吸引人</label><br>
-                    <label><input type="radio" name="q14" value="3">3 我認為自己長得很醜</label><br>
-                    <div>15</div>
-                    <label><input type="radio" name="q15" value="0" checked>0 我的工作情況跟以前一樣好</label><br>
-                    <label><input type="radio" name="q15" value="1">1 我需要特別努力才能開始工作</label><br>
-                    <label><input type="radio" name="q15" value="2">2 我必須極力催促自己才能做一些事情</label><br>
-                    <label><input type="radio" name="q15" value="3">3 我無法做任何事</label><br>
-                    <div>16</div>
-                    <label><input type="radio" name="q16" value="0" checked>0 我像往常一樣睡得好</label><br>
-                    <label><input type="radio" name="q16" value="1">1 我不像往常一樣睡得好</label><br>
-                    <label><input type="radio" name="q16" value="2">2 我比往常早醒1至2小時且難再入睡</label><br>
-                    <label><input type="radio" name="q16" value="3">3 我比往常早數小時醒來，且無法再入睡</label><br>
-                
-                    <div>17</div>
-                    <label><input type="radio" name="q17" value="0" checked>0 我並不比以往感到疲倦。</label><br>
-                    <label><input type="radio" name="q17" value="1">1 我比以往易感到疲倦。</label><br>
-                    <label><input type="radio" name="q17" value="2">2 幾乎做任何事都令我感到疲倦。</label><br>
-                    <label><input type="radio" name="q17" value="3">3 我累得任何事都不想做。</label><br><br>
-
-                    <div>18</div>
-                    <label><input type="radio" name="q18" value="0" checked>0 我的食慾不比以前差。</label><br>
-                    <label><input type="radio" name="q18" value="1">1 我的食慾不像以前那樣好。</label><br>
-                    <label><input type="radio" name="q18" value="2">2 目前我的食慾很差。</label><br>
-                    <label><input type="radio" name="q18" value="3">3 我不再感到有任何的食慾。</label><br><br>
-
-                    <div>19</div>
-                    <label><input type="radio" name="q19" value="0" checked>0 我的體重並沒有下降，若有，也只有一點。</label><br>
-                    <label><input type="radio" name="q19" value="1">1 我的體重下降了 2.5 公斤以上。</label><br>
-                    <label><input type="radio" name="q19" value="2">2 我的體重下降了 4.5 公斤以上。</label><br>
-                    <label><input type="radio" name="q19" value="3">3 我的體重下降了 7 公斤以上。</label><br><br>
-
-                    <div>20</div>
-                    <label><input type="radio" name="q20" value="0" checked>0 我並未比以往更憂慮自己的健康狀況。</label><br>
-                    <label><input type="radio" name="q20" value="1">1 我被一些生理病痛困擾，譬如胃痛、便秘等。</label><br>
-                    <label><input type="radio" name="q20" value="2">2 我很憂慮自己的健康問題，因此無法顧及許多事務。</label><br>
-                    <label><input type="radio" name="q20" value="3">3 我太憂慮自己的健康問題，以致於無法思索任何事情。</label><br><br>
-                    <div>21</div>
-                    <label><input type="radio" name="q21" value="0" checked>0 最近我對性的興趣並沒有特殊改變。</label><br>
-                    <label><input type="radio" name="q21" value="1">1 最近我對性的興趣比以前稍減。</label><br>
-                    <label><input type="radio" name="q21" value="2">2 目前我對性的興趣降低很多。</label><br>
-                    <label><input type="radio" name="q21" value="3">3 我對性已完全沒有興趣了。</label><br><br>
-        
-
-        <div class="score-display">
-            總分：<span id="totalScore">0</span>
-            <br>
-            <span id="depressionLevel"></span>
-        </div>
-
+        <form id="depressionForm">
+            <div class="question-block"><h3>題目 1：關於「難過」</h3><input type="radio" name="q1" value="0" id="q1-0" checked><label for="q1-0">我不感到難過</label><input type="radio" name="q1" value="1" id="q1-1"><label for="q1-1">我感覺難過</label><input type="radio" name="q1" value="2" id="q1-2"><label for="q1-2">我一直覺得難過且無法振作起來</label><input type="radio" name="q1" value="3" id="q1-3"><label for="q1-3">我難過且不快樂，我不能忍受這種情形了</label></div>
+            <div class="question-block"><h3>題目 2：關於「未來」</h3><input type="radio" name="q2" value="0" id="q2-0" checked><label for="q2-0">對未來我並不感覺特別沮喪</label><input type="radio" name="q2" value="1" id="q2-1"><label for="q2-1">對未來我感到沮喪</label><input type="radio" name="q2" value="2" id="q2-2"><label for="q2-2">沒有任何事可讓我期盼</label><input type="radio" name="q2" value="3" id="q2-3"><label for="q2-3">我覺得未來毫無希望，並且無法改善</label></div>
+            <div class="question-block"><h3>題目 3：關於「失敗」</h3><input type="radio" name="q3" value="0" id="q3-0" checked><label for="q3-0">我不覺得自己是個失敗者</label><input type="radio" name="q3" value="1" id="q3-1"><label for="q3-1">我比一般人害怕失敗</label><input type="radio" name="q3" value="2" id="q3-2"><label for="q3-2">回想自己的生活，我所看到的都是一大堆失敗</label><input type="radio" name="q3" value="3" id="q3-3"><label for="q3-3">我覺得自己是個徹底的失敗者</label></div>
+            <div class="question-block"><h3>題目 4：關於「滿足」</h3><input type="radio" name="q4" value="0" id="q4-0" checked><label for="q4-0">我像過去一樣從一些事中得到滿足</label><input type="radio" name="q4" value="1" id="q4-1"><label for="q4-1">我不像過去一樣對一些事感到喜悅</label><input type="radio" name="q4" value="2" id="q4-2"><label for="q4-2">我不再從任何事中感到真正的滿足</label><input type="radio" name="q4" value="3" id="q4-3"><label for="q4-3">我對任何事都感到煩躁不滿意</label></div>
+            <div class="question-block"><h3>題目 5：關於「罪惡感」</h3><input type="radio" name="q5" value="0" id="q5-0" checked><label for="q5-0">我沒有罪惡感</label><input type="radio" name="q5" value="1" id="q5-1"><label for="q5-1">偶爾我會有罪惡感</label><input type="radio" name="q5" value="2" id="q5-2"><label for="q5-2">我常常有罪惡感</label><input type="radio" name="q5" value="3" id="q5-3"><label for="q5-3">我總是感到罪惡</label></div>
+            <div class="question-block"><h3>題目 6：關於「受罰」</h3><input type="radio" name="q6" value="0" id="q6-0" checked><label for="q6-0">我不覺得自己正在受罰</label><input type="radio" name="q6" value="1" id="q6-1"><label for="q6-1">我覺得自己可能遭受報應</label><input type="radio" name="q6" value="2" id="q6-2"><label for="q6-2">我希望受到報應</label><input type="radio" name="q6" value="3" id="q6-3"><label for="q6-3">我覺得自己正在自食惡果</label></div>
+            <div class="question-block"><h3>題目 7：關於「自我評價」</h3><input type="radio" name="q7" value="0" id="q7-0" checked><label for="q7-0">我對自己並不感到失望</label><input type="radio" name="q7" value="1" id="q7-1"><label for="q7-1">我對自己甚感失望</label><input type="radio" name="q7" value="2" id="q7-2"><label for="q7-2">我討厭自己</label><input type="radio" name="q7" value="3" id="q7-3"><label for="q7-3">我恨自己</label></div>
+            <div class="question-block"><h3>題目 8：關於「自我批評」</h3><input type="radio" name="q8" value="0" id="q8-0" checked><label for="q8-0">我不覺得自己比別人差勁</label><input type="radio" name="q8" value="1" id="q8-1"><label for="q8-1">我對自己的弱點或錯誤常常挑三揀四</label><input type="radio" name="q8" value="2" id="q8-2"><label for="q8-2">我總是為了自己的缺失苛責自己</label><input type="radio" name="q8" value="3" id="q8-3"><label for="q8-3">祇要出事就會歸咎於自己</label></div>
+            <div class="question-block"><h3>題目 9：關於「自殺念頭」</h3><input type="radio" name="q9" value="0" id="q9-0" checked><label for="q9-0">我沒有任何想自殺的念頭</label><input type="radio" name="q9" value="1" id="q9-1"><label for="q9-1">我想自殺，但我不會真的那麼做</label><input type="radio" name="q9" value="2" id="q9-2"><label for="q9-2">我真想自殺</label><input type="radio" name="q9" value="3" id="q9-3"><label for="q9-3">如果有機會，我要自殺</label></div>
+            <div class="question-block"><h3>題目 10：關於「哭泣」</h3><input type="radio" name="q10" value="0" id="q10-0" checked><label for="q10-0">和平時比較，我哭的次數並無增加</label><input type="radio" name="q10" value="1" id="q10-1"><label for="q10-1">我現在比以前常哭</label><input type="radio" name="q10" value="2" id="q10-2"><label for="q10-2">現在我經常哭泣</label><input type="radio" name="q10" value="3" id="q10-3"><label for="q10-3">過去我還能，但現在想哭都哭不出來了</label></div>
+            <div class="question-block"><h3>題目 11：關於「動怒」</h3><input type="radio" name="q11" value="0" id="q11-0" checked><label for="q11-0">我對任何事並不會比以前更易動怒</label><input type="radio" name="q11" value="1" id="q11-1"><label for="q11-1">我比以前稍微有些脾氣暴躁</label><input type="radio" name="q11" value="2" id="q11-2"><label for="q11-2">很多時候我相當苦惱或脾氣暴躁</label><input type="radio" name="q11" value="3" id="q11-3"><label for="q11-3">目前我總是容易動怒</label></div>
+            <div class="question-block"><h3>題目 12：關於「人際」</h3><input type="radio" name="q12" value="0" id="q12-0" checked><label for="q12-0">我關心他人</label><input type="radio" name="q12" value="1" id="q12-1"><label for="q12-1">和以前比較我有點不關心別人</label><input type="radio" name="q12" value="2" id="q12-2"><label for="q12-2">我關心別人的程度已大不如昔</label><input type="radio" name="q12" value="3" id="q12-3"><label for="q12-3">我已不再關心他人</label></div>
+            <div class="question-block"><h3>題目 13：關於「決策」</h3><input type="radio" name="q13" value="0" id="q13-0" checked><label for="q13-0">我做決定能像以前一樣好</label><input type="radio" name="q13" value="1" id="q13-1"><label for="q13-1">我比以前會延後做決定的時間</label><input type="radio" name="q13" value="2" id="q13-2"><label for="q13-2">我做決定比以前更感困難</label><input type="radio" name="q13" value="3" id="q13-3"><label for="q13-3">我不再能做決定了</label></div>
+            <div class="question-block"><h3>題目 14：關於「外表」</h3><input type="radio" name="q14" value="0" id="q14-0" checked><label for="q14-0">我不覺得自己比以前差勁</label><input type="radio" name="q14" value="1" id="q14-1"><label for="q14-1">我擔心自己變老或不吸引人</label><input type="radio" name="q14" value="2" id="q14-2"><label for="q14-2">我覺得自己的外表變得不再吸引人</label><input type="radio" name="q14" value="3" id="q14-3"><label for="q14-3">我認為自己長得很醜</label></div>
+            <div class="question-block"><h3>題目 15：關於「工作」</h3><input type="radio" name="q15" value="0" id="q15-0" checked><label for="q15-0">我的工作情況跟以前一樣好</label><input type="radio" name="q15" value="1" id="q15-1"><label for="q15-1">我需要特別努力才能開始工作</label><input type="radio" name="q15" value="2" id="q15-2"><label for="q15-2">我必須極力催促自己才能做一些事情</label><input type="radio" name="q15" value="3" id="q15-3"><label for="q15-3">我無法做任何事</label></div>
+            <div class="question-block"><h3>題目 16：關於「睡眠」</h3><input type="radio" name="q16" value="0" id="q16-0" checked><label for="q16-0">我像往常一樣睡得好</label><input type="radio" name="q16" value="1" id="q16-1"><label for="q16-1">我不像往常一樣睡得好</label><input type="radio" name="q16" value="2" id="q16-2"><label for="q16-2">我比往常早醒1至2小時且難再入睡</label><input type="radio" name="q16" value="3" id="q16-3"><label for="q16-3">我比往常早數小時醒來，且無法再入睡</label></div>
+            <div class="question-block"><h3>題目 17：關於「疲倦」</h3><input type="radio" name="q17" value="0" id="q17-0" checked><label for="q17-0">我並不比以往感到疲倦。</label><input type="radio" name="q17" value="1" id="q17-1"><label for="q17-1">我比以往易感到疲倦。</label><input type="radio" name="q17" value="2" id="q17-2"><label for="q17-2">幾乎做任何事都令我感到疲倦。</label><input type="radio" name="q17" value="3" id="q17-3"><label for="q17-3">我累得任何事都不想做。</label></div>
+            <div class="question-block"><h3>題目 18：關於「食慾」</h3><input type="radio" name="q18" value="0" id="q18-0" checked><label for="q18-0">我的食慾不比以前差。</label><input type="radio" name="q18" value="1" id="q18-1"><label for="q18-1">我的食慾不像以前那樣好。</label><input type="radio" name="q18" value="2" id="q18-2"><label for="q18-2">目前我的食慾很差。</label><input type="radio" name="q18" value="3" id="q18-3"><label for="q18-3">我不再感到有任何的食慾。</label></div>
+            <div class="question-block"><h3>題目 19：關於「體重」</h3><input type="radio" name="q19" value="0" id="q19-0" checked><label for="q19-0">我的體重並沒有下降，若有，也只有一點。</label><input type="radio" name="q19" value="1" id="q19-1"><label for="q19-1">我的體重下降了 2.5 公斤以上。</label><input type="radio" name="q19" value="2" id="q19-2"><label for="q19-2">我的體重下降了 4.5 公斤以上。</label><input type="radio" name="q19" value="3" id="q19-3"><label for="q19-3">我的體重下降了 7 公斤以上。</label></div>
+            <div class="question-block"><h3>題目 20：關於「健康憂慮」</h3><input type="radio" name="q20" value="0" id="q20-0" checked><label for="q20-0">我並未比以往更憂慮自己的健康狀況。</label><input type="radio" name="q20" value="1" id="q20-1"><label for="q20-1">我被一些生理病痛困擾，譬如胃痛、便秘等。</label><input type="radio" name="q20" value="2" id="q20-2"><label for="q20-2">我很憂慮自己的健康問題，因此無法顧及許多事務。</label><input type="radio" name="q20" value="3" id="q20-3"><label for="q20-3">我太憂慮自己的健康問題，以致於無法思索任何事情。</label></div>
+            <div class="question-block"><h3>題目 21：關於「性趣」</h3><input type="radio" name="q21" value="0" id="q21-0" checked><label for="q21-0">最近我對性的興趣並沒有特殊改變。</label><input type="radio" name="q21" value="1" id="q21-1"><label for="q21-1">最近我對性的興趣比以前稍減。</label><input type="radio" name="q21" value="2" id="q21-2"><label for="q21-2">目前我對性的興趣降低很多。</label><input type="radio" name="q21" value="3" id="q21-3"><label for="q21-3">我對性已完全沒有興趣了。</label></div>
+            
+            <div class="score-display">
+                總分：<span id="totalScore">0</span>
+                <br>
+                <span id="depressionLevel"></span>
+            </div>
+            
             <table class="result-table">
-                <tr>
-                    <th>分數範圍</th>
-                    <th>說明</th>
-                </tr>
-                <tr>
-                    <td>0-13</td>
-                    <td>正常範圍：表示情緒狀態大致平穩</td>
-                </tr>
-                <tr>
-                    <td>14-19</td>
-                    <td>輕度憂鬱：表示可能有輕微的情緒波動或低潮</td>
-                </tr>
-                <tr>
-                    <td>20-28</td>
-                    <td>中度憂鬱：建議尋求專業的協助</td>
-                </tr>
-                <tr>
-                    <td>29-63</td>
-                    <td>重度憂鬱：建議尋求專業醫師診斷與治療</td>
-                </tr>
+                <tr><th>分數範圍</th><th>說明</th></tr>
+                <tr><td>0-13</td><td>正常範圍：表示情緒狀態大致平穩</td></tr>
+                <tr><td>14-19</td><td>輕度憂鬱：表示可能有輕微的情緒波動或低潮</td></tr>
+                <tr><td>20-28</td><td>中度憂鬱：建議尋求專業的協助</td></tr>
+                <tr><td>29-63</td><td>重度憂鬱：建議尋求專業醫師診斷與治療</td></tr>
             </table>
-        
-    </form>
+
+            <p class="warning">本量表僅為初步篩檢，不能取代專業醫療診斷。若您對結果有任何疑慮，或感到持續困擾，請務必尋求專業心理師或精神科醫師的協助。</p>
+        </form>
+    </div>
 </body>
 </html>
