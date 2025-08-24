@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yong-Jin Chen Resume</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-print-color-adjust: exact;
+            color-adjust: exact;
+        }
+        .resume-container {
+            max-width: 8.5in;
+            min-height: 11in;
+            margin: auto;
+            padding: 0.75in;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            font-weight: 700;
+        }
+        h2 {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 4px;
+            margin-top: 20px;
+            margin-bottom: 12px;
+            font-size: 1.15rem;
+            color: #2d3748;
+            letter-spacing: .025em;
+        }
+        ul {
+            list-style-position: outside;
+            padding-left: 1.25rem;
+        }
+        li {
+            margin-bottom: 4px;
+            padding-left: 2px;
+        }
+        .contact-info a {
+            color: #4a5568;
+            text-decoration: none;
+        }
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+        .skill-bar-container {
+            display: flex;
+            gap: 4px;
+        }
+        .skill-bar {
+            height: 12px;
+            width: 40px;
+            border-radius: 2px;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .resume-container {
+                box-shadow: none;
+                margin: 0;
+                padding: 0.5in;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="resume-container">
+        <!-- Header Section -->
+        <header class="text-center mb-6">
+            <h1 class="text-4xl font-bold tracking-tight text-gray-800">YONG-JIN CHEN</h1>
+            <div class="contact-info text-sm text-gray-600 mt-2 flex justify-center items-center space-x-4">
+                <a href="#">+886 923190883</a>
+                <span>|</span>
+                <a href="mailto:">kurase3201.gmail.com</a>
+                <span>|</span>
+                <a href="https://www.linkedin.com/in/%E6%B0%B8%E6%99%89-%E9%99%B3-963244244/" target="_blank">Linkedin</a>
+                <span>|</span>
+                <a href="https://github.com/Imcyj123" target="_blank">github
+</a>
+            </div>
+        </header>
+
+        <!-- Summary Section -->
+        <section>
+            <p class="text-center text-gray-700 text-base leading-relaxed">
+                Master's student in Information Management with a strong foundation in algorithms and hands-on experience in full-stack development and AI (LLMs, Reinforcement Learning). Seeking a software engineering role to apply skills in GenAI, backend systems, and RAG.
+            </p>
+        </section>
+
+        <!-- Technical Skills Section -->
+        <section>
+            <h2 class="font-bold border-b-2 border-gray-200 pb-1 mb-3">TECHNICAL SKILLS</h2>
+            <div class="grid grid-cols-2 gap-x-8 gap-y-2 text-base text-gray-700">
+                <!-- Proficiency Bars -->
+                <div class="space-y-2">
+                    <div class="flex items-center">
+                        <strong class="font-semibold text-gray-800 w-20 inline-block">Java:</strong>
+                        <div class="skill-bar-container">
+                            <div class="skill-bar bg-teal-500"></div><div class="skill-bar bg-teal-500"></div><div class="skill-bar bg-teal-500"></div><div class="skill-bar bg-teal-500"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <strong class="font-semibold text-gray-800 w-20 inline-block">Python:</strong>
+                        <div class="skill-bar-container">
+                            <div class="skill-bar bg-teal-500"></div><div class="skill-bar bg-teal-500"></div><div class="skill-bar bg-teal-500"></div><div class="skill-bar bg-gray-200"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <strong class="font-semibold text-gray-800 w-20 inline-block">C/C++:</strong>
+                        <div class="skill-bar-container">
+                            <div class="skill-bar bg-teal-500"></div><div class="skill-bar bg-teal-500"></div><div class="skill-bar bg-gray-200"></div><div class="skill-bar bg-gray-200"></div>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <strong class="font-semibold text-gray-800 w-20 inline-block">Rust:</strong>
+                        <div class="skill-bar-container">
+                            <div class="skill-bar bg-teal-500"></div><div class="skill-bar bg-gray-200"></div><div class="skill-bar bg-gray-200"></div><div class="skill-bar bg-gray-200"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Other Skills -->
+                <div class="space-y-1">
+                    <p><strong class="font-semibold text-gray-800 w-24 inline-block">Backend:</strong> Django, Spring Boot (Familiar), Laravel, PHP</p>
+                    <p><strong class="font-semibold text-gray-800 w-24 inline-block">AI/ML:</strong> LLM (App Dev, Prompt Engineering, RAG), Reinforcement Learning, YOLOv5</p>
+                    <p><strong class="font-semibold text-gray-800 w-24 inline-block">Tools:</strong> Git, Docker, Linux, MySQL, Maven (Familiar)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section>
+            <h2 class="font-bold border-b-2 border-gray-200 pb-1 mb-3">PROJECTS</h2>
+            <div class="mb-3">
+                <h3 class="text-lg font-semibold text-gray-800">LLM-based Multi-Turn Psychological Counseling System <span class="text-base font-normal text-gray-600">| Master's Thesis</span></h3>
+                <ul class="list-disc pl-5 text-gray-700 mt-1">
+                    <li>Engineered and tested prompt templates for LLMs (GPT-4o mini, Claude 3.5); implemented RAG to enhance model accuracy.</li>
+                </ul>
+            </div>
+            <div class="mb-3">
+                <h3 class="text-lg font-semibold text-gray-800">AI Game Agent "SUPER mArlo" <span class="text-base font-normal text-gray-600">| Undergraduate Capstone</span></h3>
+                <ul class="list-disc pl-5 text-gray-700 mt-1">
+                    <li>Developed a Reinforcement Learning agent using a dual-host architecture with YOLOv5 for vision detection and C++ for control.</li>
+                </ul>
+            </div>
+             <div>
+                <h3 class="text-lg font-semibold text-gray-800">Full-Stack & Backend Development</h3>
+                <ul class="list-disc pl-5 text-gray-700 mt-1">
+                    <li>Developed backend services for a Carbon Inventory System (Python/Django) and maintained a university website (PHP/Laravel).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section>
+            <h2 class="font-bold border-b-2 border-gray-200 pb-1 mb-3">EDUCATION</h2>
+            <div class="mb-3">
+                <h3 class="font-semibold text-gray-800">Information Management, Graduate School</h3>
+                <p class="text-gray-700">National Yunlin University of Science and Technology, Yunlin</p>
+                <p class="text-gray-600 text-sm">September 2023 - August 2025</p>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-800">Information Management, University</h3>
+                <p class="text-gray-700">Chaoyang University of Technology, Taichung</p>
+                <p class="text-gray-600 text-sm">September 2019 - June 2023</p>
+            </div>
+        </section>
+
+        <!-- Competitive Programming Section -->
+        <section>
+            <h2 class="font-bold border-b-2 border-gray-200 pb-1 mb-3">COMPETITIVE PROGRAMMING</h2>
+             <ul class="list-disc pl-5 text-gray-700">
+                <li><strong>ICPC Asia-Taipei Regional Contestant (2021):</strong> Honed problem-solving efficiency and advanced algorithmic skills.</li>
+                <li><strong>University Programming Competition, Bronze Award:</strong> Applied advanced data structures and algorithms in Java to secure award.</li>
+            </ul>
+        </section>
+    </div>
+</body>
+</html>
