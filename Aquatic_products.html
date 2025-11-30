@@ -30,143 +30,37 @@
             color: white !important;
         }
 
-        /* 輪播牆設定 */
-        .carousel-item {
-            height: 500px;
-            background-color: #000;
-        }
-        
-        .carousel-item img {
-            object-fit: cover;
-            height: 100%;
-            opacity: 0.8;
-        }
+        .carousel-item { height: 500px; background-color: #000; }
+        .carousel-item img { object-fit: cover; height: 100%; opacity: 0.8; }
+        .carousel-caption { bottom: 30%; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
 
-        .carousel-caption {
-            bottom: 30%;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-        }
+        .product-card { border: none; transition: transform 0.3s, box-shadow 0.3s; background: white; border-radius: 10px; overflow: hidden; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+        .product-img-wrapper { position: relative; overflow: hidden; height: 250px; }
+        .product-img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .product-card:hover .product-img-wrapper img { transform: scale(1.1); }
 
-        /* 商品卡片與動畫 */
-        .product-card {
-            border: none;
-            transition: transform 0.3s, box-shadow 0.3s;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-        }
-
-        .product-img-wrapper {
-            position: relative;
-            overflow: hidden;
-            height: 250px;
-        }
-
-        .product-img-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-
-        .product-card:hover .product-img-wrapper img {
-            transform: scale(1.1);
-        }
-
-        /* 標籤樣式 */
-        .badge-custom {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            color: white;
-            padding: 5px 10px;
-            font-size: 0.8rem;
-            border-radius: 5px;
-            font-weight: bold;
-            z-index: 2;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
+        .badge-custom { position: absolute; top: 10px; left: 10px; color: white; padding: 5px 10px; font-size: 0.8rem; border-radius: 5px; font-weight: bold; z-index: 2; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
         .bg-orange { background-color: var(--fresh-orange); }
-        .bg-purple { background-color: #6f42c1; } /* 新品 */
-        .bg-dark-overlay { 
-            position: absolute; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.6); z-index: 1; 
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 1.5rem; font-weight: bold;
-        }
+        .bg-purple { background-color: #6f42c1; }
+        .bg-dark-overlay { position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold; }
 
-        .price-tag {
-            color: #d00000;
-            font-size: 1.2rem;
-            font-weight: bold;
-        }
+        .price-tag { color: #d00000; font-size: 1.2rem; font-weight: bold; }
+        .spec-text { color: #6c757d; font-size: 0.85rem; background-color: var(--ice-blue); padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 5px; margin-right: 5px; }
 
-        .spec-text {
-            color: #6c757d;
-            font-size: 0.85rem;
-            background-color: var(--ice-blue);
-            padding: 3px 8px;
-            border-radius: 4px;
-            display: inline-block;
-            margin-bottom: 5px;
-            margin-right: 5px;
-        }
+        .btn-add-cart { background-color: var(--ocean-blue); color: white; border: none; }
+        .btn-add-cart:hover { background-color: #003355; color: white; }
+        .btn-disabled { background-color: #ccc; color: #666; cursor: not-allowed; border: none; }
 
-        .btn-add-cart {
-            background-color: var(--ocean-blue);
-            color: white;
-            border: none;
-        }
+        .filter-btn-group .btn { border-radius: 20px; margin: 0 5px; border: 1px solid var(--ocean-blue); color: var(--ocean-blue); font-weight: bold; padding: 8px 20px; transition: all 0.3s; }
+        .filter-btn-group .btn.active, .filter-btn-group .btn:hover { background-color: var(--ocean-blue); color: white; }
         
-        .btn-add-cart:hover {
-            background-color: #003355;
-            color: white;
-        }
-        
-        .btn-disabled {
-            background-color: #ccc;
-            color: #666;
-            cursor: not-allowed;
-            border: none;
-        }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 分類按鈕樣式 */
-        .filter-btn-group .btn {
-            border-radius: 20px;
-            margin: 0 5px;
-            border: 1px solid var(--ocean-blue);
-            color: var(--ocean-blue);
-            font-weight: bold;
-            padding: 8px 20px;
-            transition: all 0.3s;
-        }
-
-        .filter-btn-group .btn.active, .filter-btn-group .btn:hover {
-            background-color: var(--ocean-blue);
-            color: white;
-        }
+        footer { background-color: #212529; color: white; padding: 40px 0; }
         
-        /* 篩選動畫 CSS Class */
-        .fade-in {
-            animation: fadeIn 0.5s ease-in-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Footer */
-        footer {
-            background-color: #212529;
-            color: white;
-            padding: 40px 0;
-        }
+        .cart-trigger { cursor: pointer; }
     </style>
 </head>
 <body>
@@ -180,17 +74,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="#products">熱銷海鮮</a></li>
-                    <li class="nav-item">
-						<a class="nav-link" href="#">
-							<div class="position-relative d-inline-block">
-								<i class="fas fa-shopping-cart fa-lg"></i>
-								
-								<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-count">
-									0
-								</span>
-							</div>
-						</a>
-					</li>
+                    <li class="nav-item cart-trigger" data-bs-toggle="modal" data-bs-target="#cartModal">
+                        <a class="nav-link">
+                            <div class="position-relative d-inline-block">
+                                <i class="fas fa-shopping-cart fa-lg"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-count">
+                                    0
+                                </span>
+                            </div>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -260,7 +153,7 @@
                             <p class="card-text text-muted flex-grow-1">生食級鮮度，油脂分布均勻，乾煎、生魚片皆宜。</p>
                             <div class="d-flex justify-content-between align-items-center mt-3">
                                 <span class="price-tag">NT$ 380</span>
-                                <button class="btn btn-add-cart" onclick="addToCart('挪威鮭魚')">加入購物車</button>
+                                <button class="btn btn-add-cart" onclick="addToCart('頂級挪威鮭魚菲力', 380)">加入購物車</button>
                             </div>
                         </div>
                     </div>
@@ -281,7 +174,7 @@
                             <p class="card-text text-muted flex-grow-1">海水養殖，肉質彈牙鮮甜，火鍋必備。</p>
                             <div class="d-flex justify-content-between align-items-center mt-3">
                                 <span class="price-tag">NT$ 250</span>
-                                <button class="btn btn-add-cart" onclick="addToCart('無毒白蝦')">加入購物車</button>
+                                <button class="btn btn-add-cart" onclick="addToCart('台灣無毒白蝦', 250)">加入購物車</button>
                             </div>
                         </div>
                     </div>
@@ -302,7 +195,7 @@
                             <p class="card-text text-muted flex-grow-1">極致鮮甜，解凍即食，享受大海精華。</p>
                             <div class="d-flex justify-content-between align-items-center mt-3">
                                 <span class="price-tag">NT$ 1,280</span>
-                                <button class="btn btn-add-cart" onclick="addToCart('北海道干貝')">加入購物車</button>
+                                <button class="btn btn-add-cart" onclick="addToCart('北海道 2S 生食級干貝', 1280)">加入購物車</button>
                             </div>
                         </div>
                     </div>
@@ -323,7 +216,7 @@
                             <p class="card-text text-muted flex-grow-1">油脂豐富，薄鹽醃漬，簡單煎烤超下飯。</p>
                             <div class="d-flex justify-content-between align-items-center mt-3">
                                 <span class="price-tag">NT$ 89</span>
-                                <button class="btn btn-add-cart" onclick="addToCart('挪威鯖魚')">加入購物車</button>
+                                <button class="btn btn-add-cart" onclick="addToCart('薄鹽挪威鯖魚片', 89)">加入購物車</button>
                             </div>
                         </div>
                     </div>
@@ -365,28 +258,7 @@
                             <p class="card-text text-muted flex-grow-1">加熱即食，肉質細緻無土味，搭配白飯絕配。</p>
                             <div class="d-flex justify-content-between align-items-center mt-3">
                                 <span class="price-tag">NT$ 450</span>
-                                <button class="btn btn-add-cart" onclick="addToCart('蒲燒鰻魚')">加入購物車</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4 mb-4 product-item" data-category="shellfish">
-                    <div class="product-card h-100 shadow-sm">
-                        <div class="product-img-wrapper">
-                            <span class="badge-custom bg-primary">新品上市</span>
-                            <img src="https://placehold.co/400x300/708090/FFFFFF?text=Oysters" alt="生蠔">
-                        </div>
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">日本廣島全殼生蠔</h5>
-                            <div class="mb-2">
-                                <span class="spec-text">10顆 / 包</span>
-                                <span class="spec-text">日本廣島</span>
-                            </div>
-                            <p class="card-text text-muted flex-grow-1">個頭碩大肥美，海味濃郁，燒烤必備。</p>
-                            <div class="d-flex justify-content-between align-items-center mt-3">
-                                <span class="price-tag">NT$ 590</span>
-                                <button class="btn btn-add-cart" onclick="addToCart('廣島生蠔')">加入購物車</button>
+                                <button class="btn btn-add-cart" onclick="addToCart('外銷日本蒲燒鰻魚', 450)">加入購物車</button>
                             </div>
                         </div>
                     </div>
@@ -395,40 +267,124 @@
                 <div class="col-md-4 mb-4 product-item" data-category="fish">
                     <div class="product-card h-100 shadow-sm">
                         <div class="product-img-wrapper">
-                            <span class="badge-custom bg-info text-dark">小孩最愛</span>
-                            <img src="https://placehold.co/400x300/E0E0E0/000000?text=Cod+Fish" alt="扁鱈">
+                            <span class="badge-custom bg-danger">頂級食材</span>
+                            <img src="https://placehold.co/400x300/FF0000/FFFFFF?text=Bluefin+Tuna" alt="黑鮪魚">
                         </div>
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">格陵蘭扁鱈切片 (大比目魚)</h5>
+                            <h5 class="card-title">東港黑鮪魚大腹 (O-Toro)</h5>
                             <div class="mb-2">
-                                <span class="spec-text">400g / 片</span>
-                                <span class="spec-text">格陵蘭</span>
+                                <span class="spec-text">200g</span>
+                                <span class="spec-text">台灣東港</span>
                             </div>
-                            <p class="card-text text-muted flex-grow-1">肉質雪白細緻，無細刺，清蒸最適合全家大小。</p>
+                            <p class="card-text text-muted flex-grow-1">入口即化的夢幻口感，油脂如雪花般分佈。</p>
                             <div class="d-flex justify-content-between align-items-center mt-3">
-                                <span class="price-tag">NT$ 199</span>
-                                <button class="btn btn-add-cart" onclick="addToCart('扁鱈切片')">加入購物車</button>
+                                <span class="price-tag">NT$ 1,500</span>
+                                <button class="btn btn-add-cart" onclick="addToCart('黑鮪魚大腹', 1500)">加入購物車</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                 <div class="col-md-4 mb-4 product-item" data-category="shellfish">
+                <div class="col-md-4 mb-4 product-item" data-category="shellfish">
                     <div class="product-card h-100 shadow-sm">
                         <div class="product-img-wrapper">
-                            <span class="badge-custom bg-orange">宴席級</span>
-                            <img src="https://placehold.co/400x300/DAA520/FFFFFF?text=Abalone" alt="鮑魚">
+                            <span class="badge-custom bg-danger">活體急凍</span>
+                            <img src="https://placehold.co/400x300/B22222/FFFFFF?text=Lobster" alt="龍蝦">
                         </div>
                         <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">貢寮極鮮九孔鮑</h5>
+                            <h5 class="card-title">加拿大波士頓龍蝦</h5>
                             <div class="mb-2">
-                                <span class="spec-text">600g (約25顆)</span>
-                                <span class="spec-text">台灣貢寮</span>
+                                <span class="spec-text">500g ± 10%</span>
+                                <span class="spec-text">加拿大</span>
                             </div>
-                            <p class="card-text text-muted flex-grow-1">活體急速冷凍，口感Q彈脆口，燉雞湯首選。</p>
+                            <p class="card-text text-muted flex-grow-1">巨螯肉質飽滿，蝦膏濃郁，清蒸焗烤皆宜。</p>
                             <div class="d-flex justify-content-between align-items-center mt-3">
-                                <span class="price-tag">NT$ 650</span>
-                                <button class="btn btn-add-cart" onclick="addToCart('九孔鮑')">加入購物車</button>
+                                <span class="price-tag">NT$ 990</span>
+                                <button class="btn btn-add-cart" onclick="addToCart('波士頓龍蝦', 990)">加入購物車</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4 product-item" data-category="shellfish">
+                    <div class="product-card h-100 shadow-sm">
+                        <div class="product-img-wrapper">
+                            <span class="badge-custom bg-success">漁船直送</span>
+                            <img src="https://placehold.co/400x300/F0F8FF/000000?text=Squid" alt="透抽">
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">基隆船凍大透抽</h5>
+                            <div class="mb-2">
+                                <span class="spec-text">300g / 隻</span>
+                                <span class="spec-text">台灣基隆</span>
+                            </div>
+                            <p class="card-text text-muted flex-grow-1">捕撈後立即冷凍，鮮甜脆口，三杯、川燙首選。</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="price-tag">NT$ 180</span>
+                                <button class="btn btn-add-cart" onclick="addToCart('船凍透抽', 180)">加入購物車</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4 product-item" data-category="fish">
+                    <div class="product-card h-100 shadow-sm">
+                        <div class="product-img-wrapper">
+                            <span class="badge-custom bg-info text-dark">無刺處理</span>
+                            <img src="https://placehold.co/400x300/E0FFFF/000000?text=Milkfish" alt="虱目魚肚">
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">台南無刺虱目魚肚</h5>
+                            <div class="mb-2">
+                                <span class="spec-text">160g / 片</span>
+                                <span class="spec-text">台灣台南</span>
+                            </div>
+                            <p class="card-text text-muted flex-grow-1">人工去刺，油脂豐富，乾煎金黃酥脆最對味。</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="price-tag">NT$ 160</span>
+                                <button class="btn btn-add-cart" onclick="addToCart('無刺虱目魚肚', 160)">加入購物車</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4 product-item" data-category="fish">
+                    <div class="product-card h-100 shadow-sm">
+                        <div class="product-img-wrapper">
+                            <span class="badge-custom bg-warning text-dark">年節限定</span>
+                            <img src="https://placehold.co/400x300/FF8C00/FFFFFF?text=Mullet+Roe" alt="烏魚子">
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">野生一口烏魚子禮盒</h5>
+                            <div class="mb-2">
+                                <span class="spec-text">150g (約20片)</span>
+                                <span class="spec-text">台灣雲林</span>
+                            </div>
+                            <p class="card-text text-muted flex-grow-1">厚切炙燒，真空獨立包裝，拆封即食不沾手。</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="price-tag">NT$ 850</span>
+                                <button class="btn btn-add-cart" onclick="addToCart('一口烏魚子', 850)">加入購物車</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4 product-item" data-category="shellfish">
+                    <div class="product-card h-100 shadow-sm">
+                        <div class="product-img-wrapper">
+                            <span class="badge-custom bg-success">吐沙完成</span>
+                            <img src="https://placehold.co/400x300/808080/FFFFFF?text=Clams" alt="蛤蜊">
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">真空活體文蛤</h5>
+                            <div class="mb-2">
+                                <span class="spec-text">600g / 包</span>
+                                <span class="spec-text">台灣彰化</span>
+                            </div>
+                            <p class="card-text text-muted flex-grow-1">真空包裝技術讓文蛤冬眠，保證活體鮮度。</p>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <span class="price-tag">NT$ 120</span>
+                                <button class="btn btn-add-cart" onclick="addToCart('真空文蛤', 120)">加入購物車</button>
                             </div>
                         </div>
                     </div>
@@ -438,7 +394,7 @@
         </div>
     </section>
 
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055;">
         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header" style="background-color: var(--ice-blue);">
                 <i class="fas fa-check-circle text-success me-2"></i>
@@ -446,8 +402,44 @@
                 <small>剛剛</small>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <div class="toast-body fw-bold" id="toast-message">
-                商品已加入購物車！
+            <div class="toast-body fw-bold" id="toast-message"></div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="cartModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: var(--ocean-blue); color: white;">
+                    <h5 class="modal-title"><i class="fas fa-shopping-cart me-2"></i>您的購物車</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>商品名稱</th>
+                                <th>單價</th>
+                                <th>數量</th>
+                                <th>小計</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cart-table-body">
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-end fw-bold">總金額：</td>
+                                <td colspan="2" class="fw-bold text-danger fs-5" id="cart-total">NT$ 0</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">繼續購物</button>
+                    <button type="button" class="btn btn-primary" onclick="checkout()">
+                        <i class="fas fa-credit-card me-2"></i>前往結帳 (模擬後端)
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -455,23 +447,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        let cartCount = 0;
+        let cart = []; 
 
-        // 購物車功能
-        function addToCart(productName) {
-            cartCount++;
-            const badge = document.getElementById('cart-count');
-            badge.innerText = cartCount;
+        function addToCart(productName, price) {
+            const existingItem = cart.find(item => item.name === productName);
             
-            // Badge 動畫
-            badge.classList.remove('bg-danger');
-            badge.classList.add('bg-warning');
-            setTimeout(() => {
-                badge.classList.remove('bg-warning');
-                badge.classList.add('bg-danger');
-            }, 300);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name: productName, price: price, quantity: 1 });
+            }
+            updateCartBadge();
+            renderCartModal();
 
-            // Toast 通知
             const toastElement = document.getElementById('liveToast');
             const toastBody = document.getElementById('toast-message');
             toastBody.innerText = `已將「${productName}」放入購物車！`;
@@ -479,31 +467,114 @@
             toast.show();
         }
 
-        // 修正後的篩選功能
+        function updateCartBadge() {
+            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('cart-count');
+            badge.innerText = totalCount;
+            
+            badge.classList.remove('bg-danger');
+            badge.classList.add('bg-warning');
+            setTimeout(() => {
+                badge.classList.remove('bg-warning');
+                badge.classList.add('bg-danger');
+            }, 300);
+        }
+
+        function renderCartModal() {
+            const tbody = document.getElementById('cart-table-body');
+            const totalEl = document.getElementById('cart-total');
+            tbody.innerHTML = '';
+            
+            let totalPrice = 0;
+
+            if (cart.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">購物車是空的</td></tr>';
+            } else {
+                cart.forEach((item, index) => {
+                    const subtotal = item.price * item.quantity;
+                    totalPrice += subtotal;
+                    
+                    const row = `
+                        <tr>
+                            <td>${item.name}</td>
+                            <td>NT$ ${item.price}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${index}, -1)">-</button>
+                                <span class="mx-2">${item.quantity}</span>
+                                <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${index}, 1)">+</button>
+                            </td>
+                            <td>NT$ ${subtotal}</td>
+                            <td><button class="btn btn-sm btn-danger" onclick="removeItem(${index})"><i class="fas fa-trash"></i></button></td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+            }
+            totalEl.innerText = `NT$ ${totalPrice}`;
+        }
+
+        function updateQuantity(index, change) {
+            if (cart[index].quantity + change > 0) {
+                cart[index].quantity += change;
+            } else {
+                if(confirm('確定要移除此商品嗎？')) {
+                    cart.splice(index, 1);
+                }
+            }
+            updateCartBadge();
+            renderCartModal();
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCartBadge();
+            renderCartModal();
+        }
+
+        async function checkout() {
+            if (cart.length === 0) {
+                alert('購物車是空的，無法結帳！');
+                return;
+            }
+
+            const orderData = {
+                items: cart,
+                total: document.getElementById('cart-total').innerText,
+                timestamp: new Date().toISOString()
+            };
+
+            console.log("準備發送給後端的資料:", orderData);
+
+            try {
+                // 這裡模擬結帳成功
+                alert(`訂單已送出！\n包含 ${cart.length} 樣商品\n後端已接收資料 (請看 Console)`);
+                
+                cart = [];
+                updateCartBadge();
+                renderCartModal();
+                const modalEl = document.getElementById('cartModal');
+                const modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+                
+            } catch (error) {
+                console.error("結帳失敗", error);
+                alert("系統錯誤，請稍後再試");
+            }
+        }
+
         function filterProducts(category, btnElement) {
-            // 1. 按鈕樣式切換
             const buttons = document.querySelectorAll('.filter-btn-group .btn');
             buttons.forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
 
-            // 2. 產品篩選邏輯
             const products = document.querySelectorAll('.product-item');
-            
             products.forEach(item => {
                 const itemCategory = item.getAttribute('data-category');
-                
-                // 移除所有舊動畫 class，確保每次都能重跑
                 item.classList.remove('fade-in');
-
                 if (category === 'all' || itemCategory === category) {
-                    // 顯示：移除 bootstrap 的 d-none，並加上我們自訂的 fade-in 動畫
                     item.classList.remove('d-none');
-                    // 使用 setTimeout 讓瀏覽器有時間重繪，觸發動畫
-                    setTimeout(() => {
-                        item.classList.add('fade-in');
-                    }, 10);
+                    setTimeout(() => item.classList.add('fade-in'), 10);
                 } else {
-                    // 隱藏：直接加上 bootstrap 的 d-none
                     item.classList.add('d-none');
                 }
             });
