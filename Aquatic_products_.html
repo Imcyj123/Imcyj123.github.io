@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鮮味直送 | 頂級水產專賣</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --ocean-blue: #004d80;
+            --ice-blue: #e3f2fd;
+            --fresh-orange: #ff6600;
+        }
+
+        body {
+            font-family: "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        /* 導覽列優化 */
+        .navbar {
+            background-color: var(--ocean-blue);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+
+        /* 輪播牆設定 */
+        .carousel-item { height: 500px; background-color: #000; }
+        .carousel-item img { object-fit: cover; height: 100%; opacity: 0.8; }
+        .carousel-caption { bottom: 30%; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+
+        /* 商品卡片與動畫 */
+        .product-card { border: none; transition: transform 0.3s, box-shadow 0.3s; background: white; border-radius: 10px; overflow: hidden; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+        .product-img-wrapper { position: relative; overflow: hidden; height: 250px; background-color: #eee; }
+        .product-img-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .product-card:hover .product-img-wrapper img { transform: scale(1.1); }
+
+        /* 標籤樣式 */
+        .badge-custom { position: absolute; top: 10px; left: 10px; color: white; padding: 5px 10px; font-size: 0.8rem; border-radius: 5px; font-weight: bold; z-index: 2; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .bg-orange { background-color: var(--fresh-orange); }
+        .bg-purple { background-color: #6f42c1; }
+        .bg-dark-overlay { position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold; }
+
+        .price-tag { color: #d00000; font-size: 1.2rem; font-weight: bold; }
+        .spec-text { color: #6c757d; font-size: 0.85rem; background-color: var(--ice-blue); padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 5px; margin-right: 5px; }
+
+        .btn-add-cart { background-color: var(--ocean-blue); color: white; border: none; }
+        .btn-add-cart:hover { background-color: #003355; color: white; }
+        .btn-disabled { background-color: #ccc; color: #666; cursor: not-allowed; border: none; }
+
+        /* 分類按鈕樣式 */
+        .filter-btn-group .btn { border-radius: 20px; margin: 0 5px; border: 1px solid var(--ocean-blue); color: var(--ocean-blue); font-weight: bold; padding: 8px 20px; transition: all 0.3s; }
+        .filter-btn-group .btn.active, .filter-btn-group .btn:hover { background-color: var(--ocean-blue); color: white; }
+        
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        footer { background-color: #212529; color: white; padding: 40px 0; }
+        
+        .cart-trigger { cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-fish me-2"></i>鮮味直送</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#products">熱銷海鮮</a></li>
+                    <li class="nav-item cart-trigger" data-bs-toggle="modal" data-bs-target="#cartModal">
+                        <a class="nav-link">
+                            <div class="position-relative d-inline-block">
+                                <i class="fas fa-shopping-cart fa-lg"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cart-count">
+                                    0
+                                </span>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <header id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://placehold.co/1920x600/003366/FFFFFF?text=Ocean+Fresh" class="d-block w-100" alt="海洋背景">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2 class="display-4 fw-bold">港口直送，極致鮮甜</h2>
+                    <p class="fs-4">全程 -18°C 冷鏈物流，今晚想吃什麼？</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="https://placehold.co/1920x600/FF7F50/FFFFFF?text=Salmon+Feast" class="d-block w-100" alt="鮭魚特價">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2 class="display-4 fw-bold">挪威鮭魚季</h2>
+                    <p class="fs-4">產地空運直送，油脂最豐富的季節。</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="https://placehold.co/1920x600/8B0000/FFFFFF?text=King+Crab" class="d-block w-100" alt="帝王蟹">
+                <div class="carousel-caption d-none d-md-block">
+                    <h2 class="display-4 fw-bold">頂級智利帝王蟹</h2>
+                    <p class="fs-4">宴客首選，霸氣上桌。</p>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </button>
+    </header>
+
+    <section id="products" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-4 fw-bold" style="color: var(--ocean-blue);">嚴選水產市集</h2>
+            
+            <div class="d-flex justify-content-center mb-5 filter-btn-group">
+                <button class="btn active" onclick="renderProducts('all', this)">全部商品</button>
+                <button class="btn" onclick="renderProducts('fish', this)">鮮魚系列</button>
+                <button class="btn" onclick="renderProducts('shellfish', this)">蝦蟹貝類</button>
+            </div>
+            
+            <div class="row" id="product-grid">
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2 text-muted">正在從雲端漁場撈取資料...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055;">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header" style="background-color: var(--ice-blue);">
+                <i class="fas fa-check-circle text-success me-2"></i>
+                <strong class="me-auto">系統通知</strong>
+                <small>剛剛</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body fw-bold" id="toast-message"></div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="cartModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: var(--ocean-blue); color: white;">
+                    <h5 class="modal-title"><i class="fas fa-shopping-cart me-2"></i>您的購物車</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th width="35%">商品名稱</th>
+                                <th width="15%">單價</th>
+                                <th width="25%">數量</th>
+                                <th width="15%">小計</th>
+                                <th width="10%">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cart-table-body">
+                            </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-end fw-bold">總金額：</td>
+                                <td colspan="2" class="fw-bold text-danger fs-5" id="cart-total">NT$ 0</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">繼續購物</button>
+                    <button type="button" class="btn btn-primary" onclick="checkout()">
+                        <i class="fas fa-credit-card me-2"></i>前往結帳
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="module">
+        // 匯入 Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // ==========================================
+        // 🔴 重要：請在此處貼上您的 Firebase Config
+        // ==========================================
+        const firebaseConfig = {
+            apiKey: "您的API_KEY",
+            authDomain: "您的專案ID.firebaseapp.com",
+            projectId: "您的專案ID",
+            storageBucket: "您的專案ID.appspot.com",
+            messagingSenderId: "...",
+            appId: "..."
+        };
+
+        // 初始化 Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // 全域資料變數
+        let allProducts = [];
+        let activeDiscounts = [];
+        window.cart = []; // 掛載在 window 上，讓 HTML onclick 可以存取
+
+        // --- 1. 系統初始化：抓取資料 ---
+        async function initData() {
+            try {
+                // A. 抓取所有商品 (依建立時間排序)
+                const qProducts = query(collection(db, "products"), orderBy("createdAt", "desc"));
+                const pSnap = await getDocs(qProducts);
+                allProducts = [];
+                pSnap.forEach(doc => {
+                    allProducts.push({ id: doc.id, ...doc.data() });
+                });
+
+                // B. 抓取優惠規則 (篩選有效的)
+                const dSnap = await getDocs(collection(db, "discounts"));
+                const now = new Date();
+                activeDiscounts = [];
+                dSnap.forEach(doc => {
+                    const data = doc.data();
+                    const start = new Date(data.startTime);
+                    const end = new Date(data.endTime);
+                    if (now >= start && now <= end) {
+                        activeDiscounts.push(data);
+                    }
+                });
+
+                console.log(`成功載入 ${allProducts.length} 項商品, ${activeDiscounts.length} 個優惠活動`);
+                
+                // 渲染畫面
+                window.renderProducts('all');
+
+            } catch (error) {
+                console.error("資料載入失敗:", error);
+                document.getElementById('product-grid').innerHTML = 
+                    `<div class="col-12 text-center text-danger">連線失敗，請檢查網路或 Firebase 設定。</div>`;
+            }
+        }
+
+        // --- 2. 渲染商品列表 ---
+        window.renderProducts = function(category, btnElement) {
+            // 切換按鈕樣式
+            if(btnElement) {
+                const buttons = document.querySelectorAll('.filter-btn-group .btn');
+                buttons.forEach(btn => btn.classList.remove('active'));
+                btnElement.classList.add('active');
+            }
+
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = ''; // 清空
+
+            // 篩選商品
+            const filtered = category === 'all' 
+                ? allProducts 
+                : allProducts.filter(p => p.category === category);
+
+            if(filtered.length === 0) {
+                grid.innerHTML = `<div class="col-12 text-center text-muted py-5">目前沒有此分類的商品</div>`;
+                return;
+            }
+
+            // 產生 HTML
+            filtered.forEach(p => {
+                // 檢查是否有優惠
+                const hasDiscount = activeDiscounts.find(d => d.targetProductId === p.id);
+                const badgeHtml = hasDiscount 
+                    ? `<span class="badge-custom bg-danger">第二件 ${hasDiscount.discountRate * 10} 折</span>` 
+                    : '';
+
+                const html = `
+                    <div class="col-md-4 mb-4 fade-in">
+                        <div class="product-card h-100 shadow-sm">
+                            <div class="product-img-wrapper">
+                                ${badgeHtml}
+                                <img src="${p.image}" alt="${p.name}" onerror="this.src='https://placehold.co/400x300?text=No+Image'">
+                            </div>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">${p.name}</h5>
+                                <div class="mb-2">
+                                    <span class="spec-text">${p.desc || '新鮮直送'}</span>
+                                </div>
+                                <p class="card-text text-muted flex-grow-1">現貨供應中</p>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <span class="price-tag">NT$ ${p.price}</span>
+                                    <button class="btn btn-add-cart" onclick="addToCart('${p.id}')">加入購物車</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += html;
+            });
+        }
+
+        // --- 3. 購物車操作 ---
+        window.addToCart = function(id) {
+            const product = allProducts.find(p => p.id === id);
+            if (!product) return;
+
+            const existing = window.cart.find(item => item.id === id);
+            if (existing) {
+                existing.quantity++;
+            } else {
+                window.cart.push({ ...product, quantity: 1 });
+            }
+            
+            updateCartUI();
+            showToast(product.name);
+        }
+
+        window.changeQty = function(id, delta) {
+            const item = window.cart.find(i => i.id === id);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    if(confirm("確定要移除此商品嗎？")) {
+                        window.cart = window.cart.filter(i => i.id !== id);
+                    } else {
+                        item.quantity = 1; // 恢復
+                    }
+                }
+                updateCartUI();
+            }
+        }
+
+        window.removeFromCart = function(id) {
+            if(confirm("確定要移除此商品嗎？")) {
+                window.cart = window.cart.filter(i => i.id !== id);
+                updateCartUI();
+            }
+        }
+
+        // --- 4. 核心：更新購物車介面與價格計算 ---
+        function updateCartUI() {
+            const tbody = document.getElementById('cart-table-body');
+            const totalEl = document.getElementById('cart-total');
+            const badge = document.getElementById('cart-count');
+            
+            tbody.innerHTML = '';
+            let finalTotal = 0;
+            let totalCount = 0;
+
+            if(window.cart.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">購物車是空的</td></tr>';
+            }
+
+            window.cart.forEach(item => {
+                totalCount += item.quantity;
+                
+                // === 優惠計算邏輯 ===
+                let subtotal = 0;
+                const discountRule = activeDiscounts.find(d => d.targetProductId === item.id);
+                
+                if (discountRule && item.quantity >= 2) {
+                    const pairs = Math.floor(item.quantity / 2); // 幾組優惠
+                    const remainder = item.quantity % 2; // 剩幾單件
+                    // 一組價格 = 原價 + (原價 * 折扣率)
+                    const pairPrice = item.price + Math.round(item.price * discountRule.discountRate);
+                    
+                    subtotal = (pairs * pairPrice) + (remainder * item.price);
+                } else {
+                    subtotal = item.price * item.quantity;
+                }
+                // ==================
+
+                finalTotal += subtotal;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td>
+                            ${item.name}
+                            ${discountRule ? `<br><small class="text-danger"><i class="fas fa-tags"></i> 符合第二件${discountRule.discountRate * 10}折</small>` : ''}
+                        </td>
+                        <td>NT$ ${item.price}</td>
+                        <td>
+                            <div class="input-group input-group-sm" style="width: 100px;">
+                                <button class="btn btn-outline-secondary" onclick="changeQty('${item.id}', -1)">-</button>
+                                <input type="text" class="form-control text-center" value="${item.quantity}" readonly>
+                                <button class="btn btn-outline-secondary" onclick="changeQty('${item.id}', 1)">+</button>
+                            </div>
+                        </td>
+                        <td>NT$ ${subtotal}</td>
+                        <td><button class="btn btn-sm btn-danger" onclick="removeFromCart('${item.id}')"><i class="fas fa-trash"></i></button></td>
+                    </tr>
+                `;
+            });
+
+            totalEl.innerText = `NT$ ${finalTotal}`;
+            badge.innerText = totalCount;
+            
+            // Badge 動畫
+            badge.classList.remove('bg-danger');
+            badge.classList.add('bg-warning');
+            setTimeout(() => {
+                badge.classList.remove('bg-warning');
+                badge.classList.add('bg-danger');
+            }, 300);
+        }
+
+        // --- 5. 輔助功能：Toast 與 結帳 ---
+        function showToast(productName) {
+            const toastEl = document.getElementById('liveToast');
+            const toastBody = document.getElementById('toast-message');
+            toastBody.innerText = `已將「${productName}」加入購物車！`;
+            const toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        }
+
+        window.checkout = async function() {
+            if (window.cart.length === 0) {
+                alert('購物車是空的！');
+                return;
+            }
+            
+            const total = document.getElementById('cart-total').innerText;
+            const confirmMsg = `確認送出訂單？\n總金額：${total}\n(此為模擬功能，後續可串接金流)`;
+            
+            if(confirm(confirmMsg)) {
+                // 模擬送後端
+                console.log("訂單資料:", {
+                    items: window.cart,
+                    total: total,
+                    time: new Date()
+                });
+                
+                alert("訂單已建立！謝謝您的購買。");
+                
+                // 清空購物車
+                window.cart = [];
+                updateCartUI();
+                const modal = bootstrap.Modal.getInstance(document.getElementById('cartModal'));
+                modal.hide();
+            }
+        }
+
+        // 啟動程式
+        initData();
+
+    </script>
+</body>
+</html>
