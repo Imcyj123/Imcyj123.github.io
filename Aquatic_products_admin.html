@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>鮮味直送 | 後台管理系統</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f0f2f5; padding: 20px; }
+        .card { margin-bottom: 20px; border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="mb-4">🐟 鮮味直送 - 後台管理</h2>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">1. 上架新商品</div>
+                    <div class="card-body">
+                        <form id="addProductForm">
+                            <div class="mb-3">
+                                <label>商品名稱</label>
+                                <input type="text" id="pName" class="form-control" required placeholder="例如：挪威鮭魚">
+                            </div>
+                            <div class="mb-3">
+                                <label>價格 (NT$)</label>
+                                <input type="number" id="pPrice" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label>分類</label>
+                                <select id="pCategory" class="form-select">
+                                    <option value="fish">鮮魚系列</option>
+                                    <option value="shellfish">蝦蟹貝類</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label>圖片網址 (URL)</label>
+                                <input type="url" id="pImage" class="form-control" placeholder="https://..." required>
+                            </div>
+                            <div class="mb-3">
+                                <label>規格/產地描述</label>
+                                <input type="text" id="pDesc" class="form-control" placeholder="例如：300g / 挪威">
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">新增商品</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-danger text-white">2. 設定第二件特價優惠</div>
+                    <div class="card-body">
+                        <form id="addDiscountForm">
+                            <div class="mb-3">
+                                <label>選擇優惠商品</label>
+                                <select id="dProduct" class="form-select" required>
+                                    <option value="">載入中...</option>
+                                </select>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label>開始時間</label>
+                                    <input type="datetime-local" id="dStart" class="form-control" required>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label>結束時間</label>
+                                    <input type="datetime-local" id="dEnd" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label>第二件打幾折？ (輸入 0.5 代表五折)</label>
+                                <input type="number" id="dRate" class="form-control" step="0.1" max="0.9" min="0.1" placeholder="0.5" required>
+                            </div>
+                            <button type="submit" class="btn btn-danger w-100">設定優惠</button>
+                        </form>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">目前生效的優惠規則：</small>
+                        <ul id="activeDiscountsList" class="list-group list-group-flush mt-2"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // 🔴 請在此處貼上您的 Firebase Config
+        const firebaseConfig = {
+            apiKey: "您的API_KEY",
+            authDomain: "您的專案ID.firebaseapp.com",
+            projectId: "您的專案ID",
+            storageBucket: "您的專案ID.appspot.com",
+            messagingSenderId: "...",
+            appId: "..."
+        };
+
+        // 初始化
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // 1. 新增商品邏輯
+        document.getElementById('addProductForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await addDoc(collection(db, "products"), {
+                    name: document.getElementById('pName').value,
+                    price: Number(document.getElementById('pPrice').value),
+                    category: document.getElementById('pCategory').value,
+                    image: document.getElementById('pImage').value,
+                    desc: document.getElementById('pDesc').value,
+                    createdAt: serverTimestamp()
+                });
+                alert("商品新增成功！");
+                e.target.reset();
+                loadProductsToSelect(); // 重新整理下拉選單
+            } catch (error) {
+                console.error("Error", error);
+                alert("新增失敗");
+            }
+        });
+
+        // 2. 載入商品到下拉選單
+        async function loadProductsToSelect() {
+            const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+            const querySnapshot = await getDocs(q);
+            const select = document.getElementById('dProduct');
+            select.innerHTML = '<option value="">請選擇商品...</option>';
+            
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const option = document.createElement('option');
+                option.value = doc.id; // 儲存文件 ID
+                option.text = `${data.name} ($${data.price})`;
+                select.appendChild(option);
+            });
+        }
+        loadProductsToSelect();
+
+        // 3. 設定優惠邏輯
+        document.getElementById('addDiscountForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const productId = document.getElementById('dProduct').value;
+            const productName = document.getElementById('dProduct').options[document.getElementById('dProduct').selectedIndex].text;
+            
+            try {
+                await addDoc(collection(db, "discounts"), {
+                    targetProductId: productId,
+                    productName: productName, // 存名稱方便顯示
+                    startTime: new Date(document.getElementById('dStart').value).toISOString(),
+                    endTime: new Date(document.getElementById('dEnd').value).toISOString(),
+                    discountRate: Number(document.getElementById('dRate').value), // 0.5 = 5折
+                    createdAt: serverTimestamp()
+                });
+                alert("優惠設定成功！");
+                loadActiveDiscounts();
+            } catch (error) {
+                console.error("Error", error);
+                alert("設定失敗");
+            }
+        });
+
+        // 4. 顯示目前優惠
+        async function loadActiveDiscounts() {
+            const list = document.getElementById('activeDiscountsList');
+            list.innerHTML = '';
+            const querySnapshot = await getDocs(collection(db, "discounts"));
+            
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                // 簡單檢查是否過期
+                const now = new Date();
+                const end = new Date(data.endTime);
+                const isActive = now < end;
+                
+                if(isActive) {
+                    const li = document.createElement('li');
+                    li.className = "list-group-item d-flex justify-content-between align-items-center";
+                    li.innerHTML = `
+                        <div>
+                            <strong>${data.productName.split('(')[0]}</strong><br>
+                            <small>第二件 ${data.discountRate * 10} 折</small><br>
+                            <small class="text-muted">~ ${end.toLocaleDateString()}</small>
+                        </div>
+                        <span class="badge bg-success">進行中</span>
+                    `;
+                    list.appendChild(li);
+                }
+            });
+        }
+        loadActiveDiscounts();
+
+    </script>
+</body>
+</html>
