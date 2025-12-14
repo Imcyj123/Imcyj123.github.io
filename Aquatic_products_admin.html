@@ -13,6 +13,10 @@
 <body>
     <div class="container">
         <h2 class="mb-4">🐟 鮮味直送 - 後台管理</h2>
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> 
+            提示：在此新增商品後，請重新整理前台首頁 (index.html) 即可看到更新。
+        </div>
 
         <div class="row">
             <div class="col-md-6">
@@ -37,7 +41,8 @@
                             </div>
                             <div class="mb-3">
                                 <label>圖片網址 (URL)</label>
-                                <input type="url" id="pImage" class="form-control" placeholder="https://..." required>
+                                <input type="url" id="pImage" class="form-control" placeholder="請輸入圖片連結..." required>
+                                <div class="form-text">測試用圖片可填：https://placehold.co/400x300</div>
                             </div>
                             <div class="mb-3">
                                 <label>規格/產地描述</label>
@@ -90,23 +95,26 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // 🔴 請在此處貼上您的 Firebase Config
+        // 您的 Firebase 設定
         const firebaseConfig = {
-			apiKey: "AIzaSyB5Tg9LBWbmqICAcAsb4BZi6VT2xA7rvB4",
-			authDomain: "test-aqua-7d715.firebaseapp.com",
-			projectId: "test-aqua-7d715",
-			storageBucket: "test-aqua-7d715.firebasestorage.app",
-			messagingSenderId: "934523733452",
-			appId: "1:934523733452:web:5d0e395d69b6db64858969"
-		};
+            apiKey: "AIzaSyB5Tg9LBWbmqICAcAsb4BZi6VT2xA7rvB4",
+            authDomain: "test-aqua-7d715.firebaseapp.com",
+            projectId: "test-aqua-7d715",
+            storageBucket: "test-aqua-7d715.firebasestorage.app",
+            messagingSenderId: "934523733452",
+            appId: "1:934523733452:web:5d0e395d69b6db64858969"
+        };
 
-        // 初始化
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // 1. 新增商品邏輯
+        // 1. 新增商品
         document.getElementById('addProductForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const btn = e.target.querySelector('button');
+            btn.disabled = true;
+            btn.textContent = "處理中...";
+
             try {
                 await addDoc(collection(db, "products"), {
                     name: document.getElementById('pName').value,
@@ -116,33 +124,41 @@
                     desc: document.getElementById('pDesc').value,
                     createdAt: serverTimestamp()
                 });
-                alert("商品新增成功！");
+                alert("✅ 商品新增成功！請去前台重新整理網頁查看。");
                 e.target.reset();
-                loadProductsToSelect(); // 重新整理下拉選單
+                loadProductsToSelect(); 
             } catch (error) {
                 console.error("Error", error);
-                alert("新增失敗");
+                alert("❌ 新增失敗：" + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "新增商品";
             }
         });
 
-        // 2. 載入商品到下拉選單
+        // 2. 載入商品下拉選單
         async function loadProductsToSelect() {
-            const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
-            const querySnapshot = await getDocs(q);
             const select = document.getElementById('dProduct');
-            select.innerHTML = '<option value="">請選擇商品...</option>';
-            
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                const option = document.createElement('option');
-                option.value = doc.id; // 儲存文件 ID
-                option.text = `${data.name} ($${data.price})`;
-                select.appendChild(option);
-            });
+            try {
+                const q = query(collection(db, "products"), orderBy("createdAt", "desc"));
+                const querySnapshot = await getDocs(q);
+                select.innerHTML = '<option value="">請選擇商品...</option>';
+                
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const option = document.createElement('option');
+                    option.value = doc.id;
+                    option.text = `${data.name} ($${data.price})`;
+                    select.appendChild(option);
+                });
+            } catch (e) {
+                console.error("讀取商品失敗", e);
+                select.innerHTML = '<option value="">讀取失敗 (請檢查 Console)</option>';
+            }
         }
         loadProductsToSelect();
 
-        // 3. 設定優惠邏輯
+        // 3. 設定優惠
         document.getElementById('addDiscountForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const productId = document.getElementById('dProduct').value;
@@ -151,50 +167,54 @@
             try {
                 await addDoc(collection(db, "discounts"), {
                     targetProductId: productId,
-                    productName: productName, // 存名稱方便顯示
+                    productName: productName,
                     startTime: new Date(document.getElementById('dStart').value).toISOString(),
                     endTime: new Date(document.getElementById('dEnd').value).toISOString(),
-                    discountRate: Number(document.getElementById('dRate').value), // 0.5 = 5折
+                    discountRate: Number(document.getElementById('dRate').value),
                     createdAt: serverTimestamp()
                 });
-                alert("優惠設定成功！");
+                alert("✅ 優惠設定成功！");
                 loadActiveDiscounts();
             } catch (error) {
                 console.error("Error", error);
-                alert("設定失敗");
+                alert("❌ 設定失敗");
             }
         });
 
-        // 4. 顯示目前優惠
+        // 4. 載入有效優惠
         async function loadActiveDiscounts() {
             const list = document.getElementById('activeDiscountsList');
-            list.innerHTML = '';
-            const querySnapshot = await getDocs(collection(db, "discounts"));
-            
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                // 簡單檢查是否過期
-                const now = new Date();
-                const end = new Date(data.endTime);
-                const isActive = now < end;
+            list.innerHTML = '<li>載入中...</li>';
+            try {
+                const querySnapshot = await getDocs(collection(db, "discounts"));
+                list.innerHTML = '';
                 
-                if(isActive) {
-                    const li = document.createElement('li');
-                    li.className = "list-group-item d-flex justify-content-between align-items-center";
-                    li.innerHTML = `
-                        <div>
-                            <strong>${data.productName.split('(')[0]}</strong><br>
-                            <small>第二件 ${data.discountRate * 10} 折</small><br>
-                            <small class="text-muted">~ ${end.toLocaleDateString()}</small>
-                        </div>
-                        <span class="badge bg-success">進行中</span>
-                    `;
-                    list.appendChild(li);
-                }
-            });
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const now = new Date();
+                    const end = new Date(data.endTime);
+                    const isActive = now < end;
+                    
+                    if(isActive) {
+                        const li = document.createElement('li');
+                        li.className = "list-group-item d-flex justify-content-between align-items-center";
+                        li.innerHTML = `
+                            <div>
+                                <strong>${data.productName.split('(')[0]}</strong><br>
+                                <small>第二件 ${data.discountRate * 10} 折</small><br>
+                                <small class="text-muted">~ ${end.toLocaleDateString()}</small>
+                            </div>
+                            <span class="badge bg-success">進行中</span>
+                        `;
+                        list.appendChild(li);
+                    }
+                });
+                if(list.innerHTML === '') list.innerHTML = '<li class="list-group-item text-muted">目前無進行中的活動</li>';
+            } catch (e) {
+                list.innerHTML = '<li>讀取失敗</li>';
+            }
         }
         loadActiveDiscounts();
-
     </script>
 </body>
 </html>
